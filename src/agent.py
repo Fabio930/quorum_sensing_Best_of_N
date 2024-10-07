@@ -105,8 +105,8 @@ class Agent:
                     Agent.model=ml
             if config_element.attrib.get("r_type") is not None:
                 rv = str(config_element.attrib["r_type"])
-                if rv!="static" and rv!="dynamic":
-                    print ("[WARNING] for tag <agent> in configuration file the parameter <r_type> should be 'static' or 'dynamic'. Initialized to 'static'.\n")
+                if rv!="static" and rv!="centralized" and rv!="decentralized":
+                    print ("[WARNING] for tag <agent> in configuration file the parameter <r_type> should be 'static' or 'centralized' or 'decentralized'. Initialized to 'static'.\n")
                 else:
                     Agent.r_type=rv
             if config_element.attrib.get("rebroadcast") is not None:
@@ -186,8 +186,10 @@ class Agent:
 
     ##########################################################################
     def decision(self):
-        if Agent.r_type=="dynamic":
-            self.r = self.quorum_level if self.committed == -1 else 1-self.quorum_level
+        if Agent.r_type=="decentralized":
+            self.r = Agent.r_val*(self.quorum_level) if self.committed == -1 else Agent.r_val*(1-self.quorum_level)
+        elif Agent.r_type=="centralized":
+            self.r = Agent.r_val*(self.compute_gt()) if self.committed == -1 else Agent.r_val*(1-self.compute_gt())
         if random.uniform(0,1) < self.r:
             if Agent.model == "voter":
                 self.voter_model()
@@ -265,7 +267,7 @@ class Agent:
         if Agent.rebroadcast == "dynamic":
             return int(np.max([1,Agent.message_hops*(1-self.quorum_level)]))
         elif Agent.rebroadcast == "static":
-            return int(Agent.rebroadcast)
+            return int(Agent.message_hops)
         else:
             return 1
     
@@ -306,3 +308,11 @@ class Agent:
                 self.quorum_level+=1
         if self.quorum_level > 0: self.quorum_level = (self.quorum_level + 1)/(len(self.message_buffer) + 1)
         return
+    
+    #########################################################################
+    def compute_gt(self):
+        gt = 1
+        for a in Agent.arena.agents:
+            if a.committed == self.committed:
+                gt += 1
+        return gt/Agent.arena.num_agents

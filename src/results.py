@@ -13,7 +13,7 @@ class Results:
         self.base = os.path.abspath("../results")
         if not os.path.exists(self.base):
             os.mkdir(self.base)
-        steps_dir = self.base + "/s#" + str(arena.experiment_length) if arena.variation_time == 0 else self.base + "/s#" + str(arena.experiment_length) + ";" + str(arena.variation_time)
+        steps_dir = self.base + "/s#" + str(arena.experiment_length) + "_rec#" + str(arena.rec_time) if arena.variation_time == 0 else self.base + "/s#" + str(arena.experiment_length) + "_var#" + str(arena.variation_time) + "_rec#" + str(arena.rec_time)
         if not os.path.exists(steps_dir):
             os.mkdir(steps_dir)
         rebroad_dir = steps_dir +"/rb#" + Agent.rebroadcast
@@ -28,7 +28,7 @@ class Results:
         model_dir = options_dir + "/m#" + Agent.model
         if not os.path.exists(model_dir):
             os.mkdir(model_dir)
-        r_dir = model_dir + "/r#" + str(Agent.r_val).replace(".",",") if Agent.r_type == "static" else model_dir + "r#dynamic"
+        r_dir = model_dir + "/rt#" + str(Agent.r_type) + "_rv#" + str(Agent.r_val).replace(".",",")
         if not os.path.exists(r_dir):
             os.mkdir(r_dir)
         eta_dir = r_dir + "/e#" + str(Agent.eta).replace(".",",")
@@ -56,5 +56,5 @@ class Results:
     def print_records(self):
         for a in (range(len(self.files))):
             write_file = csv.writer(self.files[a],delimiter="\t",lineterminator="\n")
-            write_file.writerow([self.arena.agents[a].id, len(self.arena.agents[a].message_buffer), self.arena.agents[a].committed, np.round(self.arena.agents[a].quorum_level,3), self.arena.agents[a].r])
+            write_file.writerow([len(self.arena.agents[a].message_buffer), self.arena.agents[a].committed, np.round(self.arena.agents[a].quorum_level,3), np.round(self.arena.agents[a].r,3)])
         return
