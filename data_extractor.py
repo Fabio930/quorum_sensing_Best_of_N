@@ -14,7 +14,7 @@ class Results:
                     self.bases.append(os.path.join(self.base, elem))
 
 ##########################################################################################################
-    def extract_k_data(self, base, max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
+    def extract_k_data(self, base, max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
         num_runs        = int(len(os.listdir(msg_path))/n_agents)
         msgs_bigM_1     = [np.array([])] * n_agents
         commit_bigM_1   = [np.array([])] * n_agents
@@ -59,7 +59,7 @@ class Results:
         quorums         = self.rearrange_matrix(quorum_bigM_1)
         r_params        = self.rearrange_matrix(r_bigM_1)
         avg_messages    = self.compute_avg_msgs(messages)
-        self.dump_msgs("messages_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, avg_messages])
+        self.dump_msgs("messages_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, avg_messages])
         del avg_messages, msgs_bigM_1, msgs_M_1
         gc.collect()
 
@@ -81,7 +81,7 @@ class Results:
 
 ##########################################################################################################
     def dump_msgs(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
+        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
         write_header = not os.path.exists(os.path.join(os.path.abspath(""), "msgs_data", file_name))
         
         if not os.path.exists(os.path.join(os.path.abspath(""), "msgs_data")):
@@ -94,7 +94,7 @@ class Results:
             for i in range(len(data)):
                 if data[i]==None:
                     data[i]='-'
-            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13]])
+            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14]])
         return
     
 ##########################################################################################################

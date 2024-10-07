@@ -24,7 +24,7 @@ def check_inputs():
 
 # Process folder with retries and memory management
 def process_folder(task):
-    base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
+    base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
     retry_count = 50
 
     while retry_count > 0:
@@ -34,7 +34,7 @@ def process_folder(task):
             logging.info(f"Memory usage before processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
 
             results = dex.Results()
-            results.extract_k_data(base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
+            results.extract_k_data(base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
             gc.collect()
             # Memory usage logging
             logging.info(f"Memory usage after processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
@@ -87,7 +87,8 @@ def main():
                                                 for r_dir in sorted(os.listdir(model_path)):
                                                     if '.' not in r_dir and '#' in r_dir:
                                                         r_path = os.path.join(model_path,r_dir)
-                                                        r_value = str(r_dir.split('#')[1]) if r_dir.split('#')[1]=='d' else float(str(r_dir.split('#')[1]).replace(",","."))
+                                                        r_type = str(r_dir.split('_')[0].split('#')[1])
+                                                        r_value = float(str(r_dir.split('_')[1].split('#')[1]).replace(",","."))
                                                         for eta_dir in sorted(os.listdir(r_path)):
                                                             if '.' not in eta_dir and '#' in eta_dir:
                                                                 eta_path = os.path.join(r_path,eta_dir)
@@ -100,7 +101,7 @@ def main():
                                                                         msg_timeout = int(values[1].split('#')[1])
                                                                         msg_x_step = int(values[2].split('#')[1])
                                                                         msg_hops = int(values[3].split('#')[1])
-                                                                        tasks.append((base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
+                                                                        tasks.append((base, exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
 
     # Using a manager to handle the queue
     manager = Manager()
