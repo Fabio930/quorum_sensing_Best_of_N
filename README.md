@@ -10,3 +10,5 @@ The xml file in the 'config/batch' folder provides the basic configuration optio
 
 Everything can be configured by overloading the base classes.
 The xml file can also be used to switch off the GUI, by commenting the respective line.
+
+After 'runbatch.sh' completes all the simulations then is possible to process the data with the 'dump_result.py' command and plots of the data can be performed afterwards with the command 'plot_results.py'.
