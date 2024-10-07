@@ -187,9 +187,9 @@ class Agent:
     ##########################################################################
     def decision(self):
         if Agent.r_type=="decentralized":
-            self.r = Agent.r_val*(self.quorum_level) if self.committed == -1 else Agent.r_val*(1-self.quorum_level)
+            self.r = self.quorum_level if self.committed == -1 else 1-self.quorum_level
         elif Agent.r_type=="centralized":
-            self.r = Agent.r_val*(self.compute_gt()) if self.committed == -1 else Agent.r_val*(1-self.compute_gt())
+            self.r = self.compute_gt() if self.committed == -1 else 1-self.compute_gt()
         if random.uniform(0,1) < self.r:
             if Agent.model == "voter":
                 self.voter_model()
@@ -313,6 +313,6 @@ class Agent:
     def compute_gt(self):
         gt = 1
         for a in Agent.arena.agents:
-            if a.committed == self.committed:
+            if a.id!=self.id and a.committed == self.committed:
                 gt += 1
         return gt/Agent.arena.num_agents
