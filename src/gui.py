@@ -143,7 +143,7 @@ class PysageGUI(object):
         self.run_button.config(state="normal")
         self.reset_button.config(state="disabled")
         self.switch_quality_button.config(state="disabled")
-        self.arena.set_random_seed(self.arena.random_seed*np.random.choice(np.arange(.1,1.05,.1)))
+        self.arena.set_random_seed()
         self.arena.init_experiment()
         self.timestring.set( str(self.arena.num_steps) )
         self.best_opt.set("  best = "+str(self.arena.get_best_option()))

@@ -117,7 +117,7 @@ class Arena:
 
     ##########################################################################
     # initialisation/reset of the experiment variables
-    def init_experiment(self, results):
+    def init_experiment(self, results=None):
         self.num_steps = 0
         self.results = results
         self.variation_time = self.variation_time_init
@@ -141,7 +141,7 @@ class Arena:
     ##########################################################################
     # updates the simulation state
     def update( self ):
-        if self.rcd_permission and self.num_steps%self.rec_time==0:
+        if self.results!=None and self.rcd_permission and self.num_steps%self.rec_time==0:
             self.results.print_records()
         ag = random.choice(self.agents)
         ag.update()

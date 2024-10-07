@@ -1,5 +1,4 @@
 #!/bin/bash
-
-cd src/
-python3 main.py -c ../config/default_config.xml
+cd ./.venv
+python3 ../src/main.py -c ../config/default_config.xml
 cd ../

@@ -2,7 +2,6 @@
 # @author Fabio Oddi <fabioddi24@gmail.com>
 
 import matplotlib,random
-import numpy as np
 import matplotlib.colors as colors
 import matplotlib.cm as cmx
 

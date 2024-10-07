@@ -46,7 +46,7 @@ for agents in $num_agents; do
                                 for mt in $message_timeout; do
                                     for ms in $messages_per_step; do
                                         for mh in $message_hops; do
-                                            config=`printf 'config__Nrobots_%s__model_%s__rebroadcast_%s__Noptions_%s__Rtype_%s__Rval_%s__minBuff_%s__msgTime_%s__msgXstep_%s__msgHops_%s.xml' $agents $mdl $rebrcts $options $type $val $qlm $mt $ms $mh`
+                                            config=`printf 'config__Nrobots_%s__model_%s__rebroadcast_%s__Noptions_%s__Rtype_%s__Rval_%s__eta_%s__minBuff_%s__msgTime_%s__msgXstep_%s__msgHops_%s.xml' $agents $mdl $rebrcts $options $type $val $et $qlm $mt $ms $mh`
                                             cp $base_config $config
                                             sed -i "s|__NUM_AGENTS__|$agents|g" $config
                                             sed -i "s|__NUM_OPTIONS__|$options|g" $config
@@ -59,7 +59,9 @@ for agents in $num_agents; do
                                             sed -i "s|__MSG_TIMEOUT__|$mt|g" $config
                                             sed -i "s|__MSG_X_STEP__|$ms|g" $config
                                             sed -i "s|__MSG_HOPS__|$mh|g" $config
-                                            python3 src/main.py -c './'$config
+                                            cd ./.venv
+                                            python3 ../src/main.py -c '../'$config
+                                            cd ../
                                             rm *config__*.xml
                                         done
                                     done
