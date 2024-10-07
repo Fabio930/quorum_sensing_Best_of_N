@@ -111,8 +111,8 @@ class Agent:
                     Agent.r_type=rv
             if config_element.attrib.get("rebroadcast") is not None:
                 rb = str(config_element.attrib["rebroadcast"])
-                if rb!="static" and rb!="dynamic" and rb!="no":
-                    print ("[WARNING] for tag <agent> in configuration file the parameter <rebroadcast> should be 'static' or 'dynamic' or 'no'. Initialized to 'no'.\n")
+                if rb!="static" and rb!="centralized" and rb!="decentralized" and rb!="no":
+                    print ("[WARNING] for tag <agent> in configuration file the parameter <rebroadcast> should be 'static' or 'centralized' or 'decentralized' or 'no'. Initialized to 'no'.\n")
                 else:
                     Agent.rebroadcast=rb
         Agent.num_agents += 1
@@ -264,7 +264,9 @@ class Agent:
     
     ##########################################################################
     def compute_msg_hops(self):
-        if Agent.rebroadcast == "dynamic":
+        if Agent.rebroadcast == "centralized":
+            return int(np.max([1,Agent.message_hops*(1-self.compute_gt())]))
+        elif Agent.rebroadcast == "decentralized":
             return int(np.max([1,Agent.message_hops*(1-self.quorum_level)]))
         elif Agent.rebroadcast == "static":
             return int(Agent.message_hops)
