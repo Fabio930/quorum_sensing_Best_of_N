@@ -18,7 +18,7 @@ fi
 ###########################################
 
 model="voter majority"
-rebroadcast="no static dynamic"
+rebroadcast="no static" #"centralized decentralized"
 num_agents="100"
 num_options="2 3 5"
 r_type="static" #"centralized decentralized"
@@ -32,13 +32,13 @@ message_hops="1"
 for agents in $num_agents; do
     for mdl in $model; do
         for rebrcts in $rebroadcast; do
-            if [[ $rebrcts == "static" || $rebrcts == "dynamic" ]]; then
+            if [[ $rebrcts == "static" || $rebrcts == "centralized" || $rebrcts == "decentralized" ]]; then
                 message_hops="10 20 30"
             fi
             for options in $num_options; do
                 for type in $r_type; do
                     if [[ $type == "centralized" || $type == "decentralized" ]]; then
-                        r_val="1"
+                        r_val="1" # problem with centralized is initially stuck to 1
                     fi
                     for val in $r_val; do
                         for et in $eta; do
