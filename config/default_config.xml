@@ -1,0 +1,30 @@
+<?xml version = "1.0"?>
+
+<configuration>
+      <gui
+            pixels_per_meter = "100" />
+      <arena
+            num_agents = "10"
+            num_options = "2"
+            experiment_length = "1000"
+            variation_time = "0"
+            rec_time = "10"
+            num_runs = "2">
+            <agent
+                  rebroadcast = "no"
+                  model = "voter"
+                  r_type = "static"
+                  r_val = ".9"
+                  eta = ".4"
+                  quorum_list_min = "7"
+                  message_timeout = "5"
+                  messages_per_step = "5"
+                  message_hops = "10"
+                  />
+            <option
+                  max_utility = "10"
+                  std_utility = "1"
+                  k_utility = ".5"
+                  />
+      </arena>
+</configuration>

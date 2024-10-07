@@ -1,0 +1,28 @@
+<?xml version = "1.0"?>
+
+<configuration>
+      <arena
+            num_agents = "__NUM_AGENTS__"
+            num_options = "__NUM_OPTIONS__"
+            experiment_length = "5000"
+            variation_time = "0"
+            rec_time = "10"
+            num_runs = "100">
+            <agent
+                  rebroadcast = "__REBROADCAST__"
+                  model = "__MODEL__"
+                  r_type = "__R_TYPE__"
+                  r_val = "__R_VAL__"
+                  eta = "__ETA__"
+                  quorum_list_min = "__QUORUM_LIST_MIN__"
+                  message_timeout = "__MSG_TIMEOUT__"
+                  messages_per_step = "__MSG_X_STEP__"
+                  message_hops = "__MSG_HOPS__"
+                  />
+            <option
+                  max_utility = "10"
+                  std_utility = "1"
+                  k_utility = ".5"
+                  />
+      </arena>
+</configuration>
