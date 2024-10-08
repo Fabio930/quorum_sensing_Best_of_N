@@ -5,16 +5,19 @@ class Results:
         
 ##########################################################################################################
     def __init__(self):
-        self.bases=[]
+        self.threshold = 0.9
         self.base = os.path.abspath("")
-        for elem in sorted(os.listdir(self.base)):
-            if '.' not in elem:
-                selem=elem.split('_')
-                if selem[0] in ("results"):
-                    self.bases.append(os.path.join(self.base, elem))
+        self.input_folder = ""
+        for raw_results_dir in sorted(os.listdir(self.base)):
+            if '.' not in raw_results_dir and ("results_raw") in raw_results_dir:
+                self.input_folder = os.path.join(self.base, raw_results_dir)
+                break
+        self.output_folder = "./results_processed"
+        if not os.path.exists(self.output_folder):
+            os.mkdir(self.output_folder)
 
 ##########################################################################################################
-    def extract_k_data(self, base, max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
+    def extract_k_data(self, max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
         num_runs        = int(len(os.listdir(msg_path))/n_agents)
         msgs_bigM_1     = [np.array([])] * n_agents
         commit_bigM_1   = [np.array([])] * n_agents
@@ -42,7 +45,7 @@ class Results:
                     if len(msgs_M_1[seed-1])!=max_steps/rec_time: print(msg_path,'\n',"run:",seed,"agent:",agent_id,"num lines:",len(msgs_M_1[seed-1]))
                     sem = 1
                     for i in range(num_runs):
-                        if len(msgs_M_1[i])==0:
+                        if len(msgs_M_1[i]) == 0:
                             sem = 0
                             break
                     if sem == 1:
@@ -60,7 +63,20 @@ class Results:
         r_params        = self.rearrange_matrix(r_bigM_1)
         avg_messages    = self.compute_avg_msgs(messages)
         self.dump_msgs("messages_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, avg_messages])
-        del avg_messages, msgs_bigM_1, msgs_M_1
+        del avg_messages, messages, msgs_bigM_1, msgs_M_1
+        gc.collect()
+        times       = self.compute_completion_times(commits,int(max_steps//rec_time),n_agents,n_options)
+        median_time = self.extract_median(times,int(max_steps//rec_time))
+        self.dump_median_time("times_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, median_time])
+        del times, median_time
+        gc.collect()
+        residence, quorum, control_parameter = self.compute_average_residence_quorum_controlParam_on_options(commits,quorums,r_params,n_agents,n_options)
+        del commits, commit_bigM_1, commit_M_1, quorums, quorum_bigM_1, quorum_M_1, r_params, r_bigM_1, r_M_1
+        gc.collect()
+        self.dump_residence("residence_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, residence])
+        self.dump_quorum("quorum_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, quorum])
+        if r_type!="static": self.dump_control_parameter("controlParameter_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, control_parameter])
+        del residence, quorum, control_parameter
         gc.collect()
 
 #########################################################################################################
@@ -68,8 +84,25 @@ class Results:
         return np.transpose(data, (1,0,2))
 
 ##########################################################################################################
+    def extract_median(self,array,max_time):
+        median = -1
+        no_end_count = 0
+        for i in range(len(array)):
+            if array[i] > max_time: no_end_count += 1
+        sortd_arr = np.sort(array)
+        if len(sortd_arr)%2 == 0:
+            if no_end_count >= len(sortd_arr)/2:
+                return median
+            median = (sortd_arr[math.floor(len(sortd_arr)/2) - 1] + sortd_arr[math.floor(len(sortd_arr)/2)]) * .5
+        else:
+            if no_end_count >= math.ceil(len(sortd_arr)/2):
+                return median
+            median = sortd_arr[math.floor(len(sortd_arr)/2)]
+        return median
+    
+##########################################################################################################
     def compute_avg_msgs(self,messages):
-        print("--- Computing avg buffer dimension ---")
+        print("--- Computing average buffer dimension ---")
         tot_avg = [0]*len(messages[0][0])
         for i in range(len(messages)):
             for j in range(len(messages[i])):
@@ -78,16 +111,64 @@ class Results:
         for t in range(len(tot_avg)):
             tot_avg[t] = np.round(tot_avg[t]/(len(messages)*len(messages[0])),3)
         return tot_avg
+    
+##########################################################################################################
+    def compute_completion_times(self,commits,max_time,num_agents,num_options):
+        print("--- Computing median completion times ---")
+        times = [max_time + 1] * len(commits)
+        for i in range(len(commits)):
+            found = False
+            for k in range(len(commits[i][0])):
+                count = [0] * num_options
+                for j in range(len(commits[i])):
+                    if commits[i][j][k] >= 0:
+                        count[commits[i][j][k]] += 1
+                for j in range(len(count)):
+                    count[j] = count[j] / num_agents
+                    if count[j] >= self.threshold:
+                        times[i] = k
+                        found = True
+                        break
+                if found: break
+        return times
+    
+##########################################################################################################
+    def compute_average_residence_quorum_controlParam_on_options(self,commits,quorums,r_params,num_agents,num_options):
+        print("--- Computing average quorum on options ---")
+        output_agents = [[0] * len(commits[0][0])] * (num_options+1)
+        output_quorum = [[0] * len(commits[0][0])] * (num_options+1)
+        output_paramR = [[0] * len(commits[0][0])] * (num_options+1)
+        for i in range(len(commits)):
+            committed_agents    = [[0] * len(commits[0][0])] * (num_options+1)
+            flag_q              = [[0] * len(commits[0][0])] * (num_options+1)
+            flag_r              = [[0] * len(commits[0][0])] * (num_options+1)
+            for j in range(len(commits[i])):
+                for k in range(len(commits[i][j])):
+                    committed_agents[commits[i][j]][k] += 1
+                    flag_q[commits[i][j]][k] += quorums[i][j][k]
+                    flag_r[commits[i][j]][k] += r_params[i][j][k]
+            for j in range(num_options+1):
+                for k in range(len(flag_q[0])):
+                    flag_q[j][k] = flag_q[j][k]/committed_agents[j][k]
+                    flag_r[j][k] = flag_r[j][k]/committed_agents[j][k]
+            for j in range(num_options+1):
+                for k in range(len(output_quorum[0])):
+                    output_agents[j][k] += committed_agents[j][k]
+                    output_quorum[j][k] += flag_q[j][k]
+                    output_paramR[j][k] += flag_r[j][k]
+        for i in range(num_options+1):
+            for j in range(len(output_quorum[0])):
+                output_agents[i][j] = np.round(output_agents[i][j]/(len(commits)*num_agents),3)
+                output_quorum[i][j] = np.round(output_quorum[i][j]/len(commits),3)
+                output_paramR[i][j] = np.round(output_paramR[i][j]/len(commits),3)
+        return output_agents,output_quorum,output_paramR
 
 ##########################################################################################################
     def dump_msgs(self,file_name,data):
         header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
-        write_header = not os.path.exists(os.path.join(os.path.abspath(""), "msgs_data", file_name))
-        
-        if not os.path.exists(os.path.join(os.path.abspath(""), "msgs_data")):
-            os.mkdir(os.path.join(os.path.abspath(""), "msgs_data"))
-        
-        with open(os.path.join(os.path.abspath(""), "msgs_data", file_name), mode='a', newline='\n') as fw:
+        output_file = os.path.join(self.output_folder, '/'+file_name)
+        write_header = not os.path.exists(output_file)        
+        with open(output_file, mode='a', newline='\n') as fw:
             fwriter = csv.writer(fw, delimiter='\t')
             if write_header:
                 fwriter.writerow(header)
@@ -98,27 +179,74 @@ class Results:
         return
     
 ##########################################################################################################
-    def compute_average_quorum_on_options(self,commits,quorums):
+    def dump_median_time(self,file_name,data):
+        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
+        output_file = os.path.join(self.output_folder, '/'+file_name)
+        write_header = not os.path.exists(output_file)        
+        with open(output_file, mode='a', newline='\n') as fw:
+            fwriter = csv.writer(fw, delimiter='\t')
+            if write_header:
+                fwriter.writerow(header)
+            for i in range(len(data)):
+                if data[i]==None:
+                    data[i]='-'
+            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14]])
+        return
+    
+##########################################################################################################
+    def dump_residence(self,file_name,data):
+        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        output_file = os.path.join(self.output_folder, '/'+file_name)
+        write_header = not os.path.exists(output_file)        
+        with open(output_file, mode='a', newline='\n') as fw:
+            fwriter = csv.writer(fw, delimiter='\t')
+            if write_header:
+                fwriter.writerow(header)
+            for i in range(len(data)):
+                if data[i]==None:
+                    data[i]='-'
+            for i in range(len(data[14])):
+                if i == len(data[14]) - 1:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,data[14][i]])
+                else:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,data[14][i]])
         return
     
 ##########################################################################################################
     def dump_quorum(self,file_name,data):
+        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        output_file = os.path.join(self.output_folder, '/'+file_name)
+        write_header = not os.path.exists(output_file)        
+        with open(output_file, mode='a', newline='\n') as fw:
+            fwriter = csv.writer(fw, delimiter='\t')
+            if write_header:
+                fwriter.writerow(header)
+            for i in range(len(data)):
+                if data[i]==None:
+                    data[i]='-'
+            for i in range(len(data[14])):
+                if i == len(data[14]) - 1:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,data[14][i]])
+                else:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,data[14][i]])
         return
     
 ##########################################################################################################
-    def compute_average_r_value_on_options(self,commits,r_params):
-        return
-
-##########################################################################################################
-    def dump_r_values(self,file_name,data):
+    def dump_control_parameter(self,file_name,data):
+        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        output_file = os.path.join(self.output_folder, '/'+file_name)
+        write_header = not os.path.exists(output_file)        
+        with open(output_file, mode='a', newline='\n') as fw:
+            fwriter = csv.writer(fw, delimiter='\t')
+            if write_header:
+                fwriter.writerow(header)
+            for i in range(len(data)):
+                if data[i]==None:
+                    data[i]='-'
+            for i in range(len(data[14])):
+                if i == len(data[14]) - 1:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,data[14][i]])
+                else:
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,data[14][i]])
         return
     
-##########################################################################################################
-    def extract_median(self,array):
-        median = 0
-        sortd_arr = np.sort(array)
-        if len(sortd_arr)%2 == 0:
-            median = (sortd_arr[(len(sortd_arr)//2) -1] + sortd_arr[(len(sortd_arr)//2)]) * .5
-        else:
-            median = sortd_arr[math.floor(len(sortd_arr)/2)]
-        return median
