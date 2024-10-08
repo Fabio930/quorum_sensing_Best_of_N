@@ -59,7 +59,7 @@ def main():
     check_inputs()
 
     tasks = []
-    base = dex.Results().input_folder:
+    base = dex.Results().input_folder
     for exp_l_dir in sorted(os.listdir(base)):
         if '.' not in exp_l_dir and '#' in exp_l_dir:
             exp_l_path = os.path.join(base, exp_l_dir)
