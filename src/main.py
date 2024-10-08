@@ -31,7 +31,7 @@ def start(argv):
         print ("[FATAL] missing configuration file")
         print_usage(2)
 
-    print ("Reading configuration file '%s'" % configfile)
+    print ("Reading configuration file '%s'\n" % configfile)
 
     sys.path.insert(0, os.getcwd())
 
