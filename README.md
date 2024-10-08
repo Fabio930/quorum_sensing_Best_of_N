@@ -5,10 +5,9 @@ Install the venv through the command 'compile.sh'. Launch a simple visual experi
 
 The basic classes provide a not-spatial simulation about Best of N decision making problem.
 
-The xml file in the 'config' folder provides the basic configuration options for the arena and the agents, as well as for the GUI.
-The xml file in the 'config/batch' folder provides the basic configuration options for the arena and the agents which are managed in 'config/batch/loop_runs.sh' file.
+The xml file in the 'config' folder provides the basic configuration options for the arena and the agents, as well as for the GUI. The GUI can be disable commenting the respective line.
+The xml file in the 'config/batch' folder provides the basic configuration options for the arena and the agents which are managed in 'config/batch_config.xml' and 'config/batch/loop_runs.sh' file. In batch tests the GUI is disabled.
 
 Everything can be configured by overloading the base classes.
-The xml file can also be used to switch off the GUI, by commenting the respective line.
 
-After 'runbatch.sh' completes all the simulations then is possible to process the data with the 'dump_result.py' command and plots of the data can be performed afterwards with the command 'plot_results.py'.
+After 'runbatch.sh' completes all the simulations then is possible to process the data with the 'dump_result.py' command. The plots of the data can be performed afterwards with the command 'plot_results.py'.

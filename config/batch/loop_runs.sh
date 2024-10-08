@@ -17,28 +17,30 @@ fi
 
 ###########################################
 
-model="voter majority"
-rebroadcast="no static" #"centralized decentralized"
+model="majority"
+rebroadcast="no static centralized" #decentralized"
 num_agents="100"
 num_options="2 3 5"
 r_type="static" #"centralized decentralized"
-r_val="0.2 0.4 0.6 0.8"
 eta="0.2 0.4 0.6 0.8"
 quorum_list_min="8"
 message_timeout="6"
 messages_per_step="5"
-message_hops="1"
 
 for agents in $num_agents; do
     for mdl in $model; do
         for rebrcts in $rebroadcast; do
             if [[ $rebrcts == "static" || $rebrcts == "centralized" || $rebrcts == "decentralized" ]]; then
                 message_hops="10 20 30"
+            else
+                message_hops="1"
             fi
             for options in $num_options; do
                 for type in $r_type; do
                     if [[ $type == "centralized" || $type == "decentralized" ]]; then
                         r_val="1" # problem with centralized is initially stuck to 1
+                    else
+                        r_val="0.2 0.4 0.6 0.8"
                     fi
                     for val in $r_val; do
                         for et in $eta; do
@@ -62,6 +64,7 @@ for agents in $num_agents; do
                                             cd ./.venv
                                             python3 ../src/main.py -c '../'$config
                                             cd ../
+                                            echo "\n"
                                             rm *config__*.xml
                                         done
                                     done
