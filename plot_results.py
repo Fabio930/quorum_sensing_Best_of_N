@@ -9,21 +9,25 @@ def main():
         if (".csv") in file:
             file_path = os.path.join(csv_res.input_folder, file)
             if   ("messages") in file:
-                messages_dict = csv_res.read_csv_array_data(file_path,False)
-                csv_res.plot_messages(messages_dict, csv_res.output_folder+"/messages")
+                messages_dict, keys = csv_res.read_csv_array_data(file_path,False)
+                sorted_dict = csv_res.sort_dict(messages_dict, keys)
+                csv_res.plot_messages(sorted_dict, keys, csv_res.output_folder+"/messages")
             elif ("times") in file:
-                times_dict = csv_res.read_csv_file(file_path)
-                csv_res.plot_times(times_dict, csv_res.output_folder+"/times")
+                times_dict, keys = csv_res.read_csv_file(file_path)
+                sorted_dict = csv_res.sort_dict(times_dict, keys)
+                csv_res.plot_times(sorted_dict, keys, csv_res.output_folder+"/times")
             elif ("residence") in file:
-                residence_dict = csv_res.read_csv_array_data(file_path)
-                csv_res.plot_residence(residence_dict, csv_res.output_folder+"/residence")
+                residence_dict, keys = csv_res.read_csv_array_data(file_path)
+                sorted_dict = csv_res.sort_dict(residence_dict, keys)
+                csv_res.plot_residence(sorted_dict, keys, csv_res.output_folder+"/residence")
             elif ("quorum") in file:
-                quorum_dict = csv_res.read_csv_array_data(file_path)
-                csv_res.plot_quorum(quorum_dict, csv_res.output_folder+"/quorum")
+                quorum_dict, keys = csv_res.read_csv_array_data(file_path)
+                sorted_dict = csv_res.sort_dict(quorum_dict, keys)
+                csv_res.plot_quorum(sorted_dict, keys, csv_res.output_folder+"/quorum")
             elif ("controlParameter") in file:
-                controlParameter_dict = csv_res.read_csv_array_data(file_path)
-                csv_res.plot_controlParameter(controlParameter_dict, csv_res.output_folder+"/controlParameter")
-
+                controlParameter_dict, keys = csv_res.read_csv_array_data(file_path)
+                sorted_dict = csv_res.sort_dict(controlParameter_dict, keys)
+                csv_res.plot_controlParameter(sorted_dict, keys, csv_res.output_folder+"/controlParameter")
 
 ##################################################################################
 if __name__ == "__main__":
