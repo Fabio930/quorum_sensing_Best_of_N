@@ -396,14 +396,14 @@ class Data:
                     for s in steps:
                         for rt in rec_time:
                             for dt in dif_time:
-                                for a in n_agents:
-                                    for o in n_options:
-                                        for m in model:
-                                            for rv in r_value:
-                                                for ev in eta_value:
-                                                    for mq in mlq:
-                                                        for mt in mtmt:
-                                                            for ms in mxs:
+                                for mq in mlq:
+                                    for mt in mtmt:
+                                        for ms in mxs:
+                                            for a in n_agents:
+                                                for m in model:
+                                                    for o in n_options:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
                                                                 if dictionary.get((s,rt,dt,a,o,m,rv,ev,mq,mt,ms)) != None:
                                                                     save_fig = True
                                                                     vals = dictionary.get((s,rt,dt,a,o,m,rv,ev,mq,mt,ms))
@@ -552,13 +552,13 @@ class Data:
                         for s in steps:
                             for rt in rec_time:
                                 for dt in dif_time:
-                                    for a in n_agents:
-                                        for m in model:
-                                            for rv in r_value:
-                                                for ev in eta_value:
-                                                    for mq in mlq:
-                                                        for mt in mtmt:
-                                                            for ms in mxs:
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
                                                                 for oid in option_id:
                                                                     if dictionary.get((s,rt,dt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
                                                                         save_fig = True
@@ -710,13 +710,13 @@ class Data:
                         for s in steps:
                             for rt in rec_time:
                                 for dt in dif_time:
-                                    for a in n_agents:
-                                        for m in model:
-                                            for rv in r_value:
-                                                for ev in eta_value:
-                                                    for mq in mlq:
-                                                        for mt in mtmt:
-                                                            for ms in mxs:
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
                                                                 for oid in option_id:
                                                                     if dictionary.get((s,rt,dt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
                                                                         save_fig = True
@@ -868,13 +868,13 @@ class Data:
                         for s in steps:
                             for rt in rec_time:
                                 for dt in dif_time:
-                                    for a in n_agents:
-                                        for m in model:
-                                            for rv in r_value:
-                                                for ev in eta_value:
-                                                    for mq in mlq:
-                                                        for mt in mtmt:
-                                                            for ms in mxs:
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
                                                                 for oid in option_id:
                                                                     if dictionary.get((s,rt,dt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
                                                                         save_fig = True
