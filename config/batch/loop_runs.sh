@@ -17,11 +17,11 @@ fi
 
 ###########################################
 
-model="majority"
-rebroadcast="no static centralized" #decentralized"
+model="majority voter"
+rebroadcast="no" # static centralized decentralized
 num_agents="100"
 num_options="2 3 5"
-r_type="static" #"centralized decentralized"
+r_type="static" # centralized decentralized
 eta="0.2 0.4 0.6 0.8"
 quorum_list_min="8"
 message_timeout="6"
@@ -64,7 +64,7 @@ for agents in $num_agents; do
                                             cd ./.venv
                                             python3 ../src/main.py -c '../'$config
                                             cd ../
-                                            echo "\n"
+                                            echo
                                             rm *config__*.xml
                                         done
                                     done

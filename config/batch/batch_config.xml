@@ -5,7 +5,7 @@
             num_agents = "__NUM_AGENTS__"
             num_options = "__NUM_OPTIONS__"
             experiment_length = "6000"
-            variation_time = "0"
+            variation_time = "3000"
             rec_time = "10"
             num_runs = "100">
             <agent
