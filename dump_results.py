@@ -24,7 +24,7 @@ def check_inputs():
 
 # Process folder with retries and memory management
 def process_folder(task):
-    exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
+    exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
     retry_count = 50
 
     while retry_count > 0:
@@ -34,7 +34,7 @@ def process_folder(task):
             logging.info(f"Memory usage before processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
 
             results = dex.Results()
-            results.extract_k_data(exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
+            results.extract_k_data(exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
             gc.collect()
             # Memory usage logging
             logging.info(f"Memory usage after processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
@@ -65,9 +65,7 @@ def main():
             exp_l_path = os.path.join(base, exp_l_dir)
             values = exp_l_dir.split('_')
             exp_length = int(values[0].split('#')[1])
-            rec_time = int(values[1].split('#')[1]) if len(values)==2 else int(values[2].split('#')[1])
-            dif_time = None
-            if len(values)==3: dif_time = int(values[1].split('#')[1])
+            rec_time = int(values[1].split('#')[1])
             for comm_dir in sorted(os.listdir(exp_l_path)):
                 if '.' not in comm_dir and '#' in comm_dir:
                     comm_path = os.path.join(exp_l_path, comm_dir)
@@ -101,7 +99,7 @@ def main():
                                                                     msg_timeout = int(values[1].split('#')[1])
                                                                     msg_x_step = int(values[2].split('#')[1])
                                                                     msg_hops = int(values[3].split('#')[1])
-                                                                    tasks.append((exp_length, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
+                                                                    tasks.append((exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
 
     # Using a manager to handle the queue
     manager = Manager()
@@ -112,8 +110,8 @@ def main():
 
     active_processes = []
     total_memory = psutil.virtual_memory().total / (1024 * 1024)  # Total memory in MB
-    memory_per_process_25 = 162625 / 1024 # Memory used by each process with 25 agents check
-    memory_per_process_100 = 325250 / 1024 # Memory used by each process with 100 agents check
+    memory_per_process_25 = 180000 / 1024 # Memory used by each process with 25 agents check
+    memory_per_process_100 = 720000 / 1024 # Memory used by each process with 100 agents check
 
     while not queue.empty() or active_processes:
         # Calculate total memory used by active processes

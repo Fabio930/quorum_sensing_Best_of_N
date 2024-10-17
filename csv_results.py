@@ -232,15 +232,15 @@ class Data:
                 hops_dict = com_dict.get(c)
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
-                    fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                    save_fig = False
-                    col = 0
-                    row = 0
-                    ls  = "-"
-                    lc  = self.scalarMap.to_rgba(self.typo[0])
-                    for s in steps:
-                        for rt in rec_time:
-                            for dt in dif_time:
+                    for dt in dif_time:
+                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                        save_fig = False
+                        col = 0
+                        row = 0
+                        ls  = "-"
+                        lc  = self.scalarMap.to_rgba(self.typo[0])
+                        for s in steps:
+                            for rt in rec_time:
                                 for mq in mlq:
                                     for mt in mtmt:
                                         for ms in mxs:
@@ -347,14 +347,15 @@ class Data:
                                                                             axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                     else:
                                                                         ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                    for rw in range(4):
-                        for cl in range(4):
-                            ax[rw][cl].grid(which='major')                                                                
-                    fig.tight_layout()
-                    fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                    fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_messages.pdf"
-                    if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                    plt.close(fig)
+                        for rw in range(4):
+                            for cl in range(4):
+                                ax[rw][cl].grid(which='major')                                                                
+                        fig.tight_layout()
+                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                        if dt == '-': fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_messages.pdf"
+                        else: fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_d#"+str(dt)+"_messages.pdf"
+                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                        plt.close(fig)
         return
     
 ##########################################################################################################
@@ -388,14 +389,14 @@ class Data:
                 hops_dict = com_dict.get(c)
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
-                    fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                    save_fig = False
-                    col = 0
-                    row = 0
-                    lc  = self.scalarMap.to_rgba(self.typo[0])
-                    for s in steps:
-                        for rt in rec_time:
-                            for dt in dif_time:
+                    for dt in dif_time:
+                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                        save_fig = False
+                        col = 0
+                        row = 0
+                        lc  = self.scalarMap.to_rgba(self.typo[0])
+                        for s in steps:
+                            for rt in rec_time:
                                 for mq in mlq:
                                     for mt in mtmt:
                                         for ms in mxs:
@@ -500,14 +501,15 @@ class Data:
                                                                             axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                     else:
                                                                         ax[row][col].set_yticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_y_ticks)
-                    for rw in range(4):
-                        for cl in range(4):
-                            ax[rw][cl].grid(which='major')                                                                     
-                    fig.tight_layout()
-                    fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                    fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_messages.pdf"
-                    if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                    plt.close(fig)
+                        for rw in range(4):
+                            for cl in range(4):
+                                ax[rw][cl].grid(which='major')                                                                     
+                        fig.tight_layout()
+                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                        if dt == '-': fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_times.pdf"
+                        else: fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_d#"+str(dt)+"_times.pdf"
+                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                        plt.close(fig)
         return
     
 ##########################################################################################################
@@ -543,15 +545,15 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                        save_fig = False
-                        col = 0
-                        row = 0
-                        ls  = "-"
-                        lc  = self.scalarMap.to_rgba(self.typo[0])
-                        for s in steps:
-                            for rt in rec_time:
-                                for dt in dif_time:
+                        for dt in dif_time:
+                            fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            row = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
                                     for mq in mlq:
                                         for mt in mtmt:
                                             for ms in mxs:
@@ -657,19 +659,19 @@ class Data:
                                                                                 axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                         else:
                                                                             ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
-                            for cl in range(4):
-                                ax[rw][cl].grid(which='major') 
-                        fig.tight_layout()
-                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_residence.pdf"
-                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                        plt.close(fig)
+                            for rw in range(4):
+                                for cl in range(4):
+                                    ax[rw][cl].grid(which='major') 
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            if dt == '-': fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_residence.pdf"
+                            else: fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_d#"+str(dt)+"_residence.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
         return
     
 ##########################################################################################################
-    def plot_quorum(self,data_dict,keys,output_dir):
-        
+    def plot_quorum(self,data_dict,keys,output_dir):        
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         best            = mlines.Line2D([], [], color=self.scalarMap.to_rgba(self.typo[0]), marker='_', linestyle='None', markeredgewidth=18, markersize=18, label='best')
@@ -701,15 +703,15 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                        save_fig = False
-                        col = 0
-                        row = 0
-                        ls  = "-"
-                        lc  = self.scalarMap.to_rgba(self.typo[0])
-                        for s in steps:
-                            for rt in rec_time:
-                                for dt in dif_time:
+                        for dt in dif_time:
+                            fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            row = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
                                     for mq in mlq:
                                         for mt in mtmt:
                                             for ms in mxs:
@@ -815,19 +817,19 @@ class Data:
                                                                                 axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                         else:
                                                                             ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
-                            for cl in range(4):
-                                ax[rw][cl].grid(which='major')                
-                        fig.tight_layout()
-                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_quorum.pdf"
-                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                        plt.close(fig)
+                            for rw in range(4):
+                                for cl in range(4):
+                                    ax[rw][cl].grid(which='major')                
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            if dt == '-': fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_quorum.pdf"
+                            else: fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_d#"+str(dt)+"_quorum.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
         return
     
 ##########################################################################################################
     def plot_controlParameter(self,data_dict,keys,output_dir):
-        
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         best            = mlines.Line2D([], [], color=self.scalarMap.to_rgba(self.typo[0]), marker='_', linestyle='None', markeredgewidth=18, markersize=18, label='best')
@@ -859,15 +861,15 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                        save_fig = False
-                        col = 0
-                        row = 0
-                        ls  = "-"
-                        lc  = self.scalarMap.to_rgba(self.typo[0])
-                        for s in steps:
-                            for rt in rec_time:
-                                for dt in dif_time:
+                        for dt in dif_time:
+                            fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            row = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
                                     for mq in mlq:
                                         for mt in mtmt:
                                             for ms in mxs:
@@ -973,12 +975,13 @@ class Data:
                                                                                 axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                         else:
                                                                             ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
-                            for cl in range(4):
-                                ax[rw][cl].grid(which='major')                         
-                        fig.tight_layout()
-                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_control_parameter.pdf"
-                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                        plt.close(fig)
+                            for rw in range(4):
+                                for cl in range(4):
+                                    ax[rw][cl].grid(which='major')                         
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            if dt == '-': fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_control_parameter.pdf"
+                            else: fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_d#"+str(dt)+"_control_parameter.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
         return

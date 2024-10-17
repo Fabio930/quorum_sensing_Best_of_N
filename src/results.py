@@ -3,7 +3,6 @@
 
 import os, csv
 from agent import Agent
-from datetime import datetime
 import numpy as np
 
 class Results:
@@ -43,7 +42,7 @@ class Results:
 ########################################################################################    
     def open_files(self):
         for i in range(len(self.files)):
-            self.files[i] = open(self.save_path+"/agent#"+str(i)+"_run#"+str(self.arena.run_id)+"_t#"+str(datetime.now()).replace(".",",").replace(" ","--")+".csv",mode="a",newline="\n")
+            self.files[i] = open(self.save_path+"/agent#"+str(i)+"_run#"+str(self.arena.run_id)+".csv",mode="a",newline="\n")
         return
     
 ########################################################################################    

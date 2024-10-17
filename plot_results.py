@@ -12,10 +12,10 @@ def main():
                 messages_dict, keys = csv_res.read_csv_array_data(file_path,False)
                 sorted_dict = csv_res.sort_dict(messages_dict, keys)
                 csv_res.plot_messages(sorted_dict, keys, csv_res.output_folder+"/messages")
-            elif ("times") in file:
-                times_dict, keys = csv_res.read_csv_file(file_path)
-                sorted_dict = csv_res.sort_dict(times_dict, keys)
-                csv_res.plot_times(sorted_dict, keys, csv_res.output_folder+"/times")
+            # elif ("times") in file:
+            #     times_dict, keys = csv_res.read_csv_file(file_path)
+            #     sorted_dict = csv_res.sort_dict(times_dict, keys)
+            #     csv_res.plot_times(sorted_dict, keys, csv_res.output_folder+"/times")
             elif ("residence") in file:
                 residence_dict, keys = csv_res.read_csv_array_data(file_path)
                 sorted_dict = csv_res.sort_dict(residence_dict, keys)

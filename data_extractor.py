@@ -17,7 +17,7 @@ class Results:
             os.mkdir(self.output_folder)
 
 ##########################################################################################################
-    def extract_k_data(self, max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
+    def extract_k_data(self, max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path):
         num_runs        = int(len(os.listdir(msg_path))/n_agents)
         msgs_bigM_1     = [np.array([])] * n_agents
         commit_bigM_1   = [np.array([])] * n_agents
@@ -62,20 +62,20 @@ class Results:
         quorums         = self.rearrange_matrix(quorum_bigM_1)
         r_params        = self.rearrange_matrix(r_bigM_1)
         avg_messages    = self.compute_avg_msgs(messages)
-        self.dump_msgs("messages_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, avg_messages])
+        self.dump_msgs("messages_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, avg_messages])
         del avg_messages, messages, msgs_bigM_1, msgs_M_1
         gc.collect()
         times       = self.compute_completion_times(commits,int(max_steps//rec_time),n_agents,n_options)
         median_time = self.extract_median(times,int(max_steps//rec_time))
-        self.dump_median_time("times_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, median_time])
+        self.dump_median_time("times_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, median_time])
         del times, median_time
         gc.collect()
         residence, quorum, control_parameter = self.compute_average_residence_quorum_controlParam_on_options(commits,quorums,r_params,n_agents,n_options)
         del commits, commit_bigM_1, commit_M_1, quorums, quorum_bigM_1, quorum_M_1, r_params, r_bigM_1, r_M_1
         gc.collect()
-        self.dump_residence("residence_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, residence])
-        self.dump_quorum("quorum_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, quorum])
-        if r_type!="static": self.dump_control_parameter("controlParameter_resume.csv", [max_steps, rec_time, dif_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, control_parameter])
+        self.dump_residence("residence_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, residence])
+        self.dump_quorum("quorum_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, quorum])
+        if r_type!="static": self.dump_control_parameter("controlParameter_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, control_parameter])
         del residence, quorum, control_parameter
         gc.collect()
 
@@ -91,13 +91,11 @@ class Results:
             if array[i] > max_time: no_end_count += 1
         sortd_arr = np.sort(array)
         if len(sortd_arr)%2 == 0:
-            if no_end_count >= len(sortd_arr)/2:
-                return median
-            median = (sortd_arr[math.floor(len(sortd_arr)/2) - 1] + sortd_arr[math.floor(len(sortd_arr)/2)]) * .5
+            if no_end_count < len(sortd_arr)/2:
+                median = (sortd_arr[math.floor(len(sortd_arr)/2) - 1] + sortd_arr[math.floor(len(sortd_arr)/2)]) * .5
         else:
-            if no_end_count >= math.ceil(len(sortd_arr)/2):
-                return median
-            median = sortd_arr[math.floor(len(sortd_arr)/2)]
+            if no_end_count < math.ceil(len(sortd_arr)/2):
+                median = sortd_arr[math.floor(len(sortd_arr)/2)]
         return median
     
 ##########################################################################################################
@@ -115,6 +113,7 @@ class Results:
 ##########################################################################################################
     def compute_completion_times(self,commits,max_time,num_agents,num_options):
         print("--- Computing median completion times ---")
+        times = []
         times = np.array([max_time + 1] * len(commits),dtype=int)
         for i in range(len(commits)):
             found = False
@@ -166,7 +165,7 @@ class Results:
 
 ##########################################################################################################
     def dump_msgs(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
+        header = ["max_steps", "rec_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
         output_file = self.output_folder+'/'+file_name
         write_header = not os.path.exists(output_file)        
         with open(output_file, mode='a+', newline='\n') as fw:
@@ -176,12 +175,12 @@ class Results:
             for i in range(len(data)):
                 if data[i]==None:
                     data[i]='-'
-            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],list(data[14])])
+            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],list(data[13])])
         return
     
 ##########################################################################################################
     def dump_median_time(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
+        header = ["max_steps", "rec_time","rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "data"]
         output_file = self.output_folder+'/'+file_name
         write_header = not os.path.exists(output_file)        
         with open(output_file, mode='a+', newline='\n') as fw:
@@ -191,12 +190,12 @@ class Results:
             for i in range(len(data)):
                 if data[i]==None:
                     data[i]='-'
-            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],data[14]])
+            fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13]])
         return
     
 ##########################################################################################################
     def dump_residence(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        header = ["max_steps", "rec_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
         output_file = self.output_folder+'/'+file_name
         write_header = not os.path.exists(output_file)        
         with open(output_file, mode='a+', newline='\n') as fw:
@@ -208,14 +207,14 @@ class Results:
                     data[i]='-'
             for i in range(len(data[14])):
                 if i == len(data[14]) - 1:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],-1,list(data[13][i])])
                 else:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],i,list(data[13][i])])
         return
     
 ##########################################################################################################
     def dump_quorum(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        header = ["max_steps", "rec_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
         output_file = self.output_folder+'/'+file_name
         write_header = not os.path.exists(output_file)        
         with open(output_file, mode='a+', newline='\n') as fw:
@@ -227,14 +226,14 @@ class Results:
                     data[i]='-'
             for i in range(len(data[14])):
                 if i == len(data[14]) - 1:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],-1,list(data[13][i])])
                 else:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],i,list(data[13][i])])
         return
     
 ##########################################################################################################
     def dump_control_parameter(self,file_name,data):
-        header = ["max_steps", "rec_time", "dif_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
+        header = ["max_steps", "rec_time", "rebroadcast", "n_agents", "n_options", "model", "r_type", "r_value", "eta_value", "min_list_quorum", "msg_timeout", "msg_x_step", "msg_hops", "option_id", "data"]
         output_file = self.output_folder+'/'+file_name
         write_header = not os.path.exists(output_file)        
         with open(output_file, mode='a+', newline='\n') as fw:
@@ -246,8 +245,8 @@ class Results:
                     data[i]='-'
             for i in range(len(data[14])):
                 if i == len(data[14]) - 1:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],-1,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],-1,list(data[13][i])])
                 else:
-                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],data[13],i,list(data[14][i])])
+                    fwriter.writerow([data[0],data[1],data[2],data[3],data[4],data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12],i,list(data[13][i])])
         return
     
