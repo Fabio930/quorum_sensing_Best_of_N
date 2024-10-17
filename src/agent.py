@@ -121,13 +121,11 @@ class Agent:
     ##########################################################################
     # generic init function brings back to initial positions
     def init_experiment( self ):
-        commit = Agent.arena.num_agents // (Agent.arena.num_options + 1)
         self.committed = -1
-        if self.id >= commit:
-            for i in range(2,Agent.arena.num_options + 2):
-                if self.id < commit*i:
-                    self.committed = i-2
-                    break
+        if self.id < int(Agent.arena.num_agents * 0.9):
+            self.committed = 1
+        else:
+            self.committed = random.choice(np.append(np.delete(np.arange(Agent.arena.num_options),1,axis=0),-1))
         self.position = [0,0,0,0]
         self.message_buffer = []
         self.quorum_level = 0
