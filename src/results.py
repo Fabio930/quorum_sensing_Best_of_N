@@ -13,7 +13,7 @@ class Results:
         self.base = os.path.abspath("../results_raw")
         if not os.path.exists(self.base):
             os.mkdir(self.base)
-        steps_dir = self.base + "/s#" + str(arena.experiment_length) + "_rec#" + str(arena.rec_time) if arena.variation_time == 0 else self.base + "/s#" + str(arena.experiment_length) + "_var#" + str(arena.variation_time) + "_rec#" + str(arena.rec_time)
+        steps_dir = self.base + "/s#" + str(arena.experiment_length) + "_rec#" + str(arena.rec_time)
         if not os.path.exists(steps_dir):
             os.mkdir(steps_dir)
         rebroad_dir = steps_dir +"/rb#" + Agent.rebroadcast

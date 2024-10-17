@@ -4,12 +4,11 @@
       <gui
             pixels_per_meter = "100" />
       <arena
-            num_agents = "10"
-            num_options = "2"
-            experiment_length = "1000"
-            variation_time = "0"
+            num_agents = "100"
+            num_options = "5"
+            experiment_length = "0"
             rec_time = "10"
-            num_runs = "2">
+            num_runs = "1">
             <agent
                   rebroadcast = "no"
                   model = "voter"

@@ -45,13 +45,11 @@ class Arena:
         self.timestep_length = 1 if config_element.attrib.get("timestep_length") is None else float(config_element.attrib.get("timestep_length"))
         self.num_steps = 0
         self.experiment_length = 0 if config_element.attrib.get("experiment_length") is None else int(config_element.attrib["experiment_length"]) # 0 means no limit
-        self.variation_time_init = 0 if config_element.attrib.get("variation_time") is None else int(config_element.attrib["variation_time"]) # 0 means no change
         self.rec_time = 0 if config_element.attrib.get("rec_time") is None else int(config_element.attrib["rec_time"]) # 0 means no records
         self.num_agents = 1
         self.num_options = 1
         self.agents = []
         self.options = []
-        self.variation_time = self.variation_time_init
         na = config_element.attrib.get("num_agents")
         if na is None:
             print ("[WARNING] missing attribute <num_agents> in tag <arena>. Set to default value 1.\n")
@@ -120,7 +118,6 @@ class Arena:
     def init_experiment(self, results=None):
         self.num_steps = 0
         self.results = results
-        self.variation_time = self.variation_time_init
         self.change = 1
         self.rcd_permission = True if self.rec_time>0 and self.experiment_length>0 else False
         self.set_random_seed(self.run_id) if self.run_id > 0 else self.set_random_seed()
@@ -146,11 +143,6 @@ class Arena:
         ag = random.choice(self.agents)
         ag.update()
         self.num_steps += 1
-        if self.variation_time > 0 and self.change == 1 and self.num_steps >= self.variation_time:
-            self.change = 0
-            flag = self.options[0].utility
-            self.options[0].utility = self.options[1].utility
-            self.options[1].utility = flag
 
     ##########################################################################
     # determines if an exeperiment is finished

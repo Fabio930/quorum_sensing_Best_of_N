@@ -74,7 +74,6 @@ class PysageGUI(object):
             self.step_button.config(state="normal")
             self.run_button.config(state="disabled")
             self.reset_button.config(state="normal")
-            self.switch_quality_button.config(state="normal")
             self.arena.update()
             self.timestring.set( str(self.arena.num_steps) )
             mean_R = 0
@@ -99,7 +98,6 @@ class PysageGUI(object):
             self.step_button.config(state="disabled")
             self.run_button.config(state="disabled")
             self.reset_button.config(state="normal")
-            self.switch_quality_button.config(state="disable")
             self.stop()
         return
 
@@ -129,7 +127,6 @@ class PysageGUI(object):
         self.step_button.config(state="normal")
         self.run_button.config(state="normal")
         self.reset_button.config(state="normal")
-        self.switch_quality_button.config(state="normal")
         self.timestring.set( str(self.arena.num_steps) )
         self.master.update_idletasks()
         return
@@ -142,7 +139,6 @@ class PysageGUI(object):
         self.step_button.config(state="normal")
         self.run_button.config(state="normal")
         self.reset_button.config(state="disabled")
-        self.switch_quality_button.config(state="disabled")
         self.arena.set_random_seed()
         self.arena.init_experiment()
         self.timestring.set( str(self.arena.num_steps) )
@@ -155,13 +151,6 @@ class PysageGUI(object):
         return
     
     ##########################################################################
-    def switch_quality(self):
-        self.arena.variation_time = self.arena.num_steps
-        self.arena.change = 1
-        self.best_opt.set("  best = "+str(self.arena.get_best_option()))
-        return
-
-    ##########################################################################
     # GUI intialize function: stup the tk environemt
     def initialize(self):
         self.toolbar = tk.Frame(self.master, relief="raised", bd=2)
@@ -170,15 +159,12 @@ class PysageGUI(object):
         self.run_button = tk.Button(self.toolbar, text="Run", command=self.run)
         self.stop_button = tk.Button(self.toolbar, text="Stop", command=self.stop)
         self.reset_button = tk.Button(self.toolbar, text="Reset", command=self.reset)
-        self.switch_quality_button = tk.Button(self.toolbar, text="Switch quality", command=self.switch_quality)
         self.step_button.pack(side="left")
         self.stop_button.pack(side="left")
         self.run_button.pack(side="left")
         self.reset_button.pack(side="left")
-        self.switch_quality_button.pack(side="left")
         self.stop_button.config(state="disabled")
         self.reset_button.config(state="disabled")
-        self.switch_quality_button.config(state="disabled")
 
         self.labOpt = tk.Label(self.toolbar, textvariable = self.best_opt)
         self.labOpt.pack(side="left")

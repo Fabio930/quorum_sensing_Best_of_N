@@ -4,8 +4,7 @@
       <arena
             num_agents = "__NUM_AGENTS__"
             num_options = "__NUM_OPTIONS__"
-            experiment_length = "6000"
-            variation_time = "3000"
+            experiment_length = "10000"
             rec_time = "10"
             num_runs = "100">
             <agent
