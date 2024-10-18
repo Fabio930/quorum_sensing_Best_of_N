@@ -5,18 +5,18 @@
             pixels_per_meter = "100" />
       <arena
             num_agents = "100"
-            num_options = "5"
+            num_options = "2"
             experiment_length = "0"
             rec_time = "10"
             num_runs = "1">
             <agent
                   rebroadcast = "no"
                   model = "voter"
-                  r_type = "static"
-                  r_val = ".9"
+                  r_type = "centralized"
+                  r_val = ".5"
                   eta = ".4"
-                  quorum_list_min = "7"
-                  message_timeout = "5"
+                  quorum_list_min = "8"
+                  message_timeout = "6"
                   messages_per_step = "5"
                   message_hops = "10"
                   />

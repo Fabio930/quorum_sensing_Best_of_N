@@ -38,7 +38,7 @@ for agents in $num_agents; do
             for options in $num_options; do
                 for type in $r_type; do
                     if [[ $type == "centralized" || $type == "decentralized" ]]; then
-                        r_val="1" # problem with centralized is initially stuck to 1
+                        r_val=".5"
                     else
                         r_val="0.2 0.4 0.6 0.8"
                     fi

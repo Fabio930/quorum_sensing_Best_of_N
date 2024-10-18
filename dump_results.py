@@ -24,7 +24,7 @@ def check_inputs():
 
 # Process folder with retries and memory management
 def process_folder(task):
-    exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
+    base, exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path = task
     retry_count = 50
 
     while retry_count > 0:
@@ -34,7 +34,7 @@ def process_folder(task):
             logging.info(f"Memory usage before processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
 
             results = dex.Results()
-            results.extract_k_data(exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
+            results.extract_k_data(base, exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path)
             gc.collect()
             # Memory usage logging
             logging.info(f"Memory usage after processing {msg_path}: {process.memory_info().rss / (1024 * 1024)} MB")
@@ -59,47 +59,47 @@ def main():
     check_inputs()
 
     tasks = []
-    base = dex.Results().input_folder
-    for exp_l_dir in sorted(os.listdir(base)):
-        if '.' not in exp_l_dir and '#' in exp_l_dir:
-            exp_l_path = os.path.join(base, exp_l_dir)
-            values = exp_l_dir.split('_')
-            exp_length = int(values[0].split('#')[1])
-            rec_time = int(values[1].split('#')[1])
-            for comm_dir in sorted(os.listdir(exp_l_path)):
-                if '.' not in comm_dir and '#' in comm_dir:
-                    comm_path = os.path.join(exp_l_path, comm_dir)
-                    communication = str(comm_dir.split('#')[1])
-                    for agents_dir in sorted(os.listdir(comm_path)):
-                        if '.' not in agents_dir and '#' in agents_dir:
-                            agents_path = os.path.join(comm_path, agents_dir)
-                            n_agents = int(agents_dir.split('#')[1])
-                            for options_dir in sorted(os.listdir(agents_path)):
-                                if '.' not in options_dir and '#' in options_dir:
-                                    options_path = os.path.join(agents_path, options_dir)
-                                    n_options = int(options_dir.split('#')[1])
-                                    for model_dir in sorted(os.listdir(options_path)):
-                                        if '.' not in model_dir and '#' in model_dir:
-                                            model_path = os.path.join(options_path,model_dir)
-                                            model = str(model_dir.split('#')[1])
-                                            for r_dir in sorted(os.listdir(model_path)):
-                                                if '.' not in r_dir and '#' in r_dir:
-                                                    r_path = os.path.join(model_path,r_dir)
-                                                    r_type = str(r_dir.split('_')[0].split('#')[1])
-                                                    r_value = float(str(r_dir.split('_')[1].split('#')[1]).replace(",","."))
-                                                    for eta_dir in sorted(os.listdir(r_path)):
-                                                        if '.' not in eta_dir and '#' in eta_dir:
-                                                            eta_path = os.path.join(r_path,eta_dir)
-                                                            eta_value = float(str(eta_dir.split('#')[1]).replace(",","."))
-                                                            for msg_dir in sorted(os.listdir(eta_path)):
-                                                                if '.' not in msg_dir and '#' in msg_dir:
-                                                                    msg_path = os.path.join(eta_path,msg_dir)
-                                                                    values = msg_dir.split('_')
-                                                                    quorum_min_list = int(values[0].split('#')[1])
-                                                                    msg_timeout = int(values[1].split('#')[1])
-                                                                    msg_x_step = int(values[2].split('#')[1])
-                                                                    msg_hops = int(values[3].split('#')[1])
-                                                                    tasks.append((exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
+    for base in dex.Results().input_folders:
+        for exp_l_dir in sorted(os.listdir(base)):
+            if '.' not in exp_l_dir and '#' in exp_l_dir:
+                exp_l_path = os.path.join(base, exp_l_dir)
+                values = exp_l_dir.split('_')
+                exp_length = int(values[0].split('#')[1])
+                rec_time = int(values[1].split('#')[1])
+                for comm_dir in sorted(os.listdir(exp_l_path)):
+                    if '.' not in comm_dir and '#' in comm_dir:
+                        comm_path = os.path.join(exp_l_path, comm_dir)
+                        communication = str(comm_dir.split('#')[1])
+                        for agents_dir in sorted(os.listdir(comm_path)):
+                            if '.' not in agents_dir and '#' in agents_dir:
+                                agents_path = os.path.join(comm_path, agents_dir)
+                                n_agents = int(agents_dir.split('#')[1])
+                                for options_dir in sorted(os.listdir(agents_path)):
+                                    if '.' not in options_dir and '#' in options_dir:
+                                        options_path = os.path.join(agents_path, options_dir)
+                                        n_options = int(options_dir.split('#')[1])
+                                        for model_dir in sorted(os.listdir(options_path)):
+                                            if '.' not in model_dir and '#' in model_dir:
+                                                model_path = os.path.join(options_path,model_dir)
+                                                model = str(model_dir.split('#')[1])
+                                                for r_dir in sorted(os.listdir(model_path)):
+                                                    if '.' not in r_dir and '#' in r_dir:
+                                                        r_path = os.path.join(model_path,r_dir)
+                                                        r_type = str(r_dir.split('_')[0].split('#')[1])
+                                                        r_value = float(str(r_dir.split('_')[1].split('#')[1]).replace(",","."))
+                                                        for eta_dir in sorted(os.listdir(r_path)):
+                                                            if '.' not in eta_dir and '#' in eta_dir:
+                                                                eta_path = os.path.join(r_path,eta_dir)
+                                                                eta_value = float(str(eta_dir.split('#')[1]).replace(",","."))
+                                                                for msg_dir in sorted(os.listdir(eta_path)):
+                                                                    if '.' not in msg_dir and '#' in msg_dir:
+                                                                        msg_path = os.path.join(eta_path,msg_dir)
+                                                                        values = msg_dir.split('_')
+                                                                        quorum_min_list = int(values[0].split('#')[1])
+                                                                        msg_timeout = int(values[1].split('#')[1])
+                                                                        msg_x_step = int(values[2].split('#')[1])
+                                                                        msg_hops = int(values[3].split('#')[1])
+                                                                        tasks.append((base, exp_length, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, msg_path))
 
     # Using a manager to handle the queue
     manager = Manager()
