@@ -231,6 +231,7 @@ class Data:
                     lc  = self.scalarMap.to_rgba(self.typo[0])
                     for s in steps:
                         for rt in rec_time:
+                            x_lim = int(s)//int(rt)
                             for mq in mlq:
                                 for mt in mtmt:
                                     for ms in mxs:
@@ -262,10 +263,10 @@ class Data:
                                                                 elif m == "majority":
                                                                     ls = "--"
                                                                 ax[col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                ax[col].set_xlim(0,(int(s)//int(rt))+1)
+                                                                ax[col].set_xlim(0,x_lim+1)
                                                                 ax[col].set_ylim(0,1)
                                                                 if len(real_x_ticks)==0:
-                                                                    for x in range(0,(int(s)//int(rt))+1,50):
+                                                                    for x in range(0,x_lim+1,50):
                                                                         if x%150 == 0:
                                                                             svoid_x_ticks.append('')
                                                                             void_x_ticks.append('')
@@ -274,8 +275,8 @@ class Data:
                                                                             void_x_ticks.append('')
                                                                     for y in range(0,11,1):
                                                                         void_y_ticks.append('')
-                                                                ax[col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_x_ticks)
-                                                                ax[col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                ax[col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                ax[col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                 axt = ax[col].twiny()
                                                                 labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                 empty_string_labels = ['']*len(labels)
@@ -340,6 +341,7 @@ class Data:
                     lc  = self.scalarMap.to_rgba(self.typo[0])
                     for s in steps:
                         for rt in rec_time:
+                            x_lim = int(s)//int(rt)
                             for mq in mlq:
                                 for mt in mtmt:
                                     for ms in mxs:
@@ -378,9 +380,9 @@ class Data:
                                                                 elif m == "majority":
                                                                     ls = "--"
                                                                 ax[row][col].bar(vals,color=lc,linestyle=ls,lw=6)
-                                                                ax[row][col].set_ylim(0,(int(s)//int(rt))+1)
+                                                                ax[row][col].set_ylim(0,x_lim+1)
                                                                 if len(real_y_ticks)==0:
-                                                                    for x in range(0,(int(s)//int(rt))+1,50):
+                                                                    for x in range(0,x_lim+1,50):
                                                                         if x%150 == 0:
                                                                             svoid_y_ticks.append('')
                                                                             void_y_ticks.append('')
@@ -388,8 +390,8 @@ class Data:
                                                                         else:
                                                                             void_y_ticks.append('')
                                                                 if row == 0:
-                                                                    # ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                    # ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                    # ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                    # ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                     axt = ax[row][col].twiny()
                                                                     labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                     empty_string_labels = ['']*len(labels)
@@ -403,19 +405,19 @@ class Data:
                                                                     elif col==3:
                                                                         axt.set_xlabel(r"$\eta = 0.8\,  s$")
                                                                 elif row==3:
-                                                                    # ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_x_ticks)
-                                                                    # ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                    # ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                    # ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                     ax[row][col].set_xlabel(r"$T\,  s$")
                                                                 # else:
-                                                                #     ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                #     ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                #     ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                #     ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                 if col==0:
-                                                                    ax[row][col].set_yticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_y_ticks)
-                                                                    ax[row][col].set_yticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_y_ticks,minor=True)
+                                                                    ax[row][col].set_yticks(np.arange(0,x_lim+1,150),labels=real_y_ticks)
+                                                                    ax[row][col].set_yticks(np.arange(0,x_lim+1,50),labels=void_y_ticks,minor=True)
                                                                     ax[row][col].set_ylabel("M")
                                                                 elif col==3:
-                                                                    ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_y_ticks)
-                                                                    ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_y_ticks,minor=True)
+                                                                    ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_y_ticks)
+                                                                    ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_y_ticks,minor=True)
                                                                     axt = ax[row][col].twinx()
                                                                     labels = [item.get_text() for item in axt.get_yticklabels()]
                                                                     empty_string_labels = ['']*len(labels)
@@ -429,7 +431,7 @@ class Data:
                                                                     elif row==3:
                                                                         axt.set_ylabel(r"$R = 0.8\,  s$")
                                                                 else:
-                                                                    ax[row][col].set_yticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_y_ticks)
+                                                                    ax[row][col].set_yticks(np.arange(0,x_lim+1,50),labels=void_y_ticks)
                     for rw in range(4):
                         for cl in range(4):
                             ax[rw][cl].grid(which='major')                                                                     
@@ -480,6 +482,7 @@ class Data:
                         lc  = self.scalarMap.to_rgba(self.typo[0])
                         for s in steps:
                             for rt in rec_time:
+                                x_lim = int(s)//int(rt)
                                 for mq in mlq:
                                     for mt in mtmt:
                                         for ms in mxs:
@@ -518,10 +521,10 @@ class Data:
                                                                     elif m == "majority":
                                                                         ls = "--"
                                                                     ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,(int(s)//int(rt))+1)
+                                                                    ax[row][col].set_xlim(0,x_lim+1)
                                                                     ax[row][col].set_ylim(0,1)
                                                                     if len(real_x_ticks)==0:
-                                                                        for x in range(0,(int(s)//int(rt))+1,50):
+                                                                        for x in range(0,x_lim+1,50):
                                                                             if x%150 == 0:
                                                                                 svoid_x_ticks.append('')
                                                                                 void_x_ticks.append('')
@@ -531,8 +534,8 @@ class Data:
                                                                         for y in range(0,11,1):
                                                                             void_y_ticks.append('')
                                                                     if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         axt = ax[row][col].twiny()
                                                                         labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
@@ -546,12 +549,12 @@ class Data:
                                                                         elif col==3:
                                                                             axt.set_xlabel(r"$\eta = 0.8\,  s$")
                                                                     elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         ax[row][col].set_xlabel(r"$T\,  s$")
                                                                     else:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                     if col==0:
                                                                         ax[row][col].set_yticks(np.arange(0,1.01,.1))
                                                                         ax[row][col].set_ylabel("A")
@@ -621,6 +624,7 @@ class Data:
                         lc  = self.scalarMap.to_rgba(self.typo[0])
                         for s in steps:
                             for rt in rec_time:
+                                x_lim = int(s)//int(rt)
                                 for mq in mlq:
                                     for mt in mtmt:
                                         for ms in mxs:
@@ -659,10 +663,10 @@ class Data:
                                                                     elif m == "majority":
                                                                         ls = "--"
                                                                     ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,(int(s)//int(rt))+1)
+                                                                    ax[row][col].set_xlim(0,x_lim+1)
                                                                     ax[row][col].set_ylim(0,1)
                                                                     if len(real_x_ticks)==0:
-                                                                        for x in range(0,(int(s)//int(rt))+1,50):
+                                                                        for x in range(0,x_lim+1,50):
                                                                             if x%150 == 0:
                                                                                 svoid_x_ticks.append('')
                                                                                 void_x_ticks.append('')
@@ -672,8 +676,8 @@ class Data:
                                                                         for y in range(0,11,1):
                                                                             void_y_ticks.append('')
                                                                     if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         axt = ax[row][col].twiny()
                                                                         labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
@@ -687,12 +691,12 @@ class Data:
                                                                         elif col==3:
                                                                             axt.set_xlabel(r"$\eta = 0.8\,  s$")
                                                                     elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         ax[row][col].set_xlabel(r"$T\,  s$")
                                                                     else:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                     if col==0:
                                                                         ax[row][col].set_yticks(np.arange(0,1.01,.1))
                                                                         ax[row][col].set_ylabel("Q")
@@ -762,6 +766,7 @@ class Data:
                         lc  = self.scalarMap.to_rgba(self.typo[0])
                         for s in steps:
                             for rt in rec_time:
+                                x_lim = int(s)//int(rt)
                                 for mq in mlq:
                                     for mt in mtmt:
                                         for ms in mxs:
@@ -800,10 +805,10 @@ class Data:
                                                                     elif m == "majority":
                                                                         ls = "--"
                                                                     ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,(int(s)//int(rt))+1)
+                                                                    ax[row][col].set_xlim(0,x_lim+1)
                                                                     ax[row][col].set_ylim(0,1)
                                                                     if len(real_x_ticks)==0:
-                                                                        for x in range(0,(int(s)//int(rt))+1,50):
+                                                                        for x in range(0,x_lim+1,50):
                                                                             if x%150 == 0:
                                                                                 svoid_x_ticks.append('')
                                                                                 void_x_ticks.append('')
@@ -813,8 +818,8 @@ class Data:
                                                                         for y in range(0,11,1):
                                                                             void_y_ticks.append('')
                                                                     if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         axt = ax[row][col].twiny()
                                                                         labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
@@ -828,12 +833,12 @@ class Data:
                                                                         elif col==3:
                                                                             axt.set_xlabel(r"$\eta = 0.8\,  s$")
                                                                     elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                         ax[row][col].set_xlabel(r"$T\,  s$")
                                                                     else:
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,(int(s)//int(rt))+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
                                                                     if col==0:
                                                                         ax[row][col].set_yticks(np.arange(0,1.01,.1))
                                                                         ax[row][col].set_ylabel("Q")
