@@ -1,0 +1,27 @@
+<?xml version = "1.0"?>
+
+<configuration>
+      <arena
+            num_agents = "100"
+            num_options = "2"
+            experiment_length = "10000"
+            rec_time = "10"
+            num_runs = "100">
+            <agent
+                  rebroadcast = "no"
+                  model = "majority"
+                  r_type = "centralized"
+                  r_val = "0"
+                  eta = "0.4"
+                  quorum_list_min = "8"
+                  message_timeout = "6"
+                  messages_per_step = "5"
+                  message_hops = "1"
+                  />
+            <option
+                  max_utility = "10"
+                  std_utility = "1"
+                  k_utility = ".5"
+                  />
+      </arena>
+</configuration>
