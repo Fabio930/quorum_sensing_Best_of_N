@@ -22,7 +22,6 @@ rebroadcast="no" # static centralized decentralized
 num_agents="100"
 num_options="2 3 5"
 r_type="centralized" # static decentralized
-r_val="0.2 0.4 0.6 0.8"
 eta="0.2 0.4 0.6 0.8"
 quorum_list_min="8"
 message_timeout="6"
@@ -38,6 +37,11 @@ for agents in $num_agents; do
             fi
             for options in $num_options; do
                 for type in $r_type; do
+                    if [[ $type == "centralized" || $type == "decentralized" ]]; then
+                        r_val="0.5"
+                    else
+                        r_val="0.2 0.4 0.6 0.8"
+                    fi
                     for val in $r_val; do
                         for et in $eta; do
                             for qlm in $quorum_list_min; do

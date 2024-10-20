@@ -474,114 +474,197 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                        save_fig = False
-                        col = 0
-                        row = 0
-                        ls  = "-"
-                        lc  = self.scalarMap.to_rgba(self.typo[0])
-                        for s in steps:
-                            for rt in rec_time:
-                                x_lim = int(s)//int(rt)
-                                for mq in mlq:
-                                    for mt in mtmt:
-                                        for ms in mxs:
-                                            for a in n_agents:
-                                                for m in model:
-                                                    for rv in r_value:
-                                                        for ev in eta_value:
-                                                            for oid in option_id:
-                                                                if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
-                                                                    save_fig = True
-                                                                    vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
-                                                                    if rv == "0.2":
-                                                                        row = 0
-                                                                    elif rv == "0.4":
-                                                                        row = 1
-                                                                    elif rv == "0.6":
-                                                                        row = 2
-                                                                    elif rv == "0.8":
-                                                                        row = 3
-                                                                    if ev == "0.2":
-                                                                        col = 0
-                                                                    elif ev == "0.4":
-                                                                        col = 1
-                                                                    elif ev == "0.6":
-                                                                        col = 2
-                                                                    elif ev == "0.8":
-                                                                        col = 3
-                                                                    if oid == "0":
-                                                                        lc = self.scalarMap.to_rgba(self.typo[0])
-                                                                    elif oid == "-1":
-                                                                        lc = self.scalarMap.to_rgba(self.typo[6])
-                                                                    else:
-                                                                        lc = self.scalarMap.to_rgba(self.typo[3])
-                                                                    if m == "voter":
-                                                                        ls = "-"
-                                                                    elif m == "majority":
-                                                                        ls = "--"
-                                                                    ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,x_lim+1)
-                                                                    ax[row][col].set_ylim(0,1)
-                                                                    if len(real_x_ticks)==0:
-                                                                        for x in range(0,x_lim+1,50):
-                                                                            if x%150 == 0:
-                                                                                svoid_x_ticks.append('')
-                                                                                void_x_ticks.append('')
-                                                                                real_x_ticks.append(str(int(np.round(x,0))))
-                                                                            else:
-                                                                                void_x_ticks.append('')
-                                                                        for y in range(0,11,1):
-                                                                            void_y_ticks.append('')
-                                                                    if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        axt = ax[row][col].twiny()
+                        if r == "static":
+                            fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            row = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
+                                    x_lim = int(s)//int(rt)
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
+                                                                for oid in option_id:
+                                                                    if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
+                                                                        save_fig = True
+                                                                        vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
+                                                                        if rv == "0.2":
+                                                                            row = 0
+                                                                        elif rv == "0.4":
+                                                                            row = 1
+                                                                        elif rv == "0.6":
+                                                                            row = 2
+                                                                        elif rv == "0.8":
+                                                                            row = 3
+                                                                        if ev == "0.2":
+                                                                            col = 0
+                                                                        elif ev == "0.4":
+                                                                            col = 1
+                                                                        elif ev == "0.6":
+                                                                            col = 2
+                                                                        elif ev == "0.8":
+                                                                            col = 3
+                                                                        if oid == "0":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[0])
+                                                                        elif oid == "-1":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[6])
+                                                                        else:
+                                                                            lc = self.scalarMap.to_rgba(self.typo[3])
+                                                                        if m == "voter":
+                                                                            ls = "-"
+                                                                        elif m == "majority":
+                                                                            ls = "--"
+                                                                        ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
+                                                                        ax[row][col].set_xlim(0,x_lim+1)
+                                                                        ax[row][col].set_ylim(0,1)
+                                                                        if len(real_x_ticks)==0:
+                                                                            for x in range(0,x_lim+1,50):
+                                                                                if x%150 == 0:
+                                                                                    svoid_x_ticks.append('')
+                                                                                    void_x_ticks.append('')
+                                                                                    real_x_ticks.append(str(int(np.round(x,0))))
+                                                                                else:
+                                                                                    void_x_ticks.append('')
+                                                                            for y in range(0,11,1):
+                                                                                void_y_ticks.append('')
+                                                                        if row == 0:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                            axt = ax[row][col].twiny()
+                                                                            labels = [item.get_text() for item in axt.get_xticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_xticklabels(empty_string_labels)
+                                                                            if col==0:
+                                                                                axt.set_xlabel(r"$\eta = 0.2\,  s$")
+                                                                            elif col==1:
+                                                                                axt.set_xlabel(r"$\eta = 0.4\,  s$")
+                                                                            elif col==2:
+                                                                                axt.set_xlabel(r"$\eta = 0.6\,  s$")
+                                                                            elif col==3:
+                                                                                axt.set_xlabel(r"$\eta = 0.8\,  s$")
+                                                                        elif row==3:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                            ax[row][col].set_xlabel(r"$T\,  s$")
+                                                                        else:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                        if col==0:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1))
+                                                                            ax[row][col].set_ylabel("A")
+                                                                        elif col==3:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                            axt = ax[row][col].twinx()
+                                                                            labels = [item.get_text() for item in axt.get_yticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_yticklabels(empty_string_labels)
+                                                                            if row==0:
+                                                                                axt.set_ylabel(r"$R = 0.2\,  s$")
+                                                                            elif row==1:
+                                                                                axt.set_ylabel(r"$R = 0.4\,  s$")
+                                                                            elif row==2:
+                                                                                axt.set_ylabel(r"$R = 0.6\,  s$")
+                                                                            elif row==3:
+                                                                                axt.set_ylabel(r"$R = 0.8\,  s$")
+                                                                        else:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                            for rw in range(4):
+                                for cl in range(4):
+                                    ax[rw][cl].grid(which='major') 
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_residence.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
+                        else:
+                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
+                                    x_lim = int(s)//int(rt)
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
+                                                                for oid in option_id:
+                                                                    if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
+                                                                        save_fig = True
+                                                                        vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
+                                                                        if ev == "0.2":
+                                                                            col = 0
+                                                                        elif ev == "0.4":
+                                                                            col = 1
+                                                                        elif ev == "0.6":
+                                                                            col = 2
+                                                                        elif ev == "0.8":
+                                                                            col = 3
+                                                                        if oid == "0":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[0])
+                                                                        elif oid == "-1":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[6])
+                                                                        else:
+                                                                            lc = self.scalarMap.to_rgba(self.typo[3])
+                                                                        if m == "voter":
+                                                                            ls = "-"
+                                                                        elif m == "majority":
+                                                                            ls = "--"
+                                                                        ax[col].plot(vals,color=lc,linestyle=ls,lw=6)
+                                                                        ax[col].set_xlim(0,x_lim+1)
+                                                                        ax[col].set_ylim(0,1)
+                                                                        if len(real_x_ticks)==0:
+                                                                            for x in range(0,x_lim+1,50):
+                                                                                if x%150 == 0:
+                                                                                    svoid_x_ticks.append('')
+                                                                                    void_x_ticks.append('')
+                                                                                    real_x_ticks.append(str(int(np.round(x,0))))
+                                                                                else:
+                                                                                    void_x_ticks.append('')
+                                                                            for y in range(0,11,1):
+                                                                                void_y_ticks.append('')
+                                                                        ax[col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                        ax[col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[col].set_xlabel(r"$T\,  s$")
+                                                                        axt = ax[col].twiny()
                                                                         labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
                                                                         axt.set_xticklabels(empty_string_labels)
                                                                         if col==0:
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1))
+                                                                            ax[col].set_ylabel("A")
                                                                             axt.set_xlabel(r"$\eta = 0.2\,  s$")
                                                                         elif col==1:
                                                                             axt.set_xlabel(r"$\eta = 0.4\,  s$")
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
                                                                         elif col==2:
                                                                             axt.set_xlabel(r"$\eta = 0.6\,  s$")
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
                                                                         elif col==3:
                                                                             axt.set_xlabel(r"$\eta = 0.8\,  s$")
-                                                                    elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        ax[row][col].set_xlabel(r"$T\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                    if col==0:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1))
-                                                                        ax[row][col].set_ylabel("A")
-                                                                    elif col==3:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                                                                        axt = ax[row][col].twinx()
-                                                                        labels = [item.get_text() for item in axt.get_yticklabels()]
-                                                                        empty_string_labels = ['']*len(labels)
-                                                                        axt.set_yticklabels(empty_string_labels)
-                                                                        if row==0:
-                                                                            axt.set_ylabel(r"$R = 0.2\,  s$")
-                                                                        elif row==1:
-                                                                            axt.set_ylabel(r"$R = 0.4\,  s$")
-                                                                        elif row==2:
-                                                                            axt.set_ylabel(r"$R = 0.6\,  s$")
-                                                                        elif row==3:
-                                                                            axt.set_ylabel(r"$R = 0.8\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                            axt = ax[col].twinx()
+                                                                            labels = [item.get_text() for item in axt.get_yticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_yticklabels(empty_string_labels)
                             for cl in range(4):
-                                ax[rw][cl].grid(which='major') 
-                        fig.tight_layout()
-                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_residence.pdf"
-                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                        plt.close(fig)
+                                ax[cl].grid(which='major') 
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_residence.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
         return
     
 ##########################################################################################################
@@ -616,114 +699,197 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
-                        save_fig = False
-                        col = 0
-                        row = 0
-                        ls  = "-"
-                        lc  = self.scalarMap.to_rgba(self.typo[0])
-                        for s in steps:
-                            for rt in rec_time:
-                                x_lim = int(s)//int(rt)
-                                for mq in mlq:
-                                    for mt in mtmt:
-                                        for ms in mxs:
-                                            for a in n_agents:
-                                                for m in model:
-                                                    for rv in r_value:
-                                                        for ev in eta_value:
-                                                            for oid in option_id:
-                                                                if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
-                                                                    save_fig = True
-                                                                    vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
-                                                                    if rv == "0.2":
-                                                                        row = 0
-                                                                    elif rv == "0.4":
-                                                                        row = 1
-                                                                    elif rv == "0.6":
-                                                                        row = 2
-                                                                    elif rv == "0.8":
-                                                                        row = 3
-                                                                    if ev == "0.2":
-                                                                        col = 0
-                                                                    elif ev == "0.4":
-                                                                        col = 1
-                                                                    elif ev == "0.6":
-                                                                        col = 2
-                                                                    elif ev == "0.8":
-                                                                        col = 3
-                                                                    if oid == "0":
-                                                                        lc = self.scalarMap.to_rgba(self.typo[0])
-                                                                    elif oid == "-1":
-                                                                        lc = self.scalarMap.to_rgba(self.typo[6])
-                                                                    else:
-                                                                        lc = self.scalarMap.to_rgba(self.typo[3])
-                                                                    if m == "voter":
-                                                                        ls = "-"
-                                                                    elif m == "majority":
-                                                                        ls = "--"
-                                                                    ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,x_lim+1)
-                                                                    ax[row][col].set_ylim(0,1)
-                                                                    if len(real_x_ticks)==0:
-                                                                        for x in range(0,x_lim+1,50):
-                                                                            if x%150 == 0:
-                                                                                svoid_x_ticks.append('')
-                                                                                void_x_ticks.append('')
-                                                                                real_x_ticks.append(str(int(np.round(x,0))))
-                                                                            else:
-                                                                                void_x_ticks.append('')
-                                                                        for y in range(0,11,1):
-                                                                            void_y_ticks.append('')
-                                                                    if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        axt = ax[row][col].twiny()
+                        if r == "static":
+                            fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            row = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
+                                    x_lim = int(s)//int(rt)
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
+                                                                for oid in option_id:
+                                                                    if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
+                                                                        save_fig = True
+                                                                        vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
+                                                                        if rv == "0.2":
+                                                                            row = 0
+                                                                        elif rv == "0.4":
+                                                                            row = 1
+                                                                        elif rv == "0.6":
+                                                                            row = 2
+                                                                        elif rv == "0.8":
+                                                                            row = 3
+                                                                        if ev == "0.2":
+                                                                            col = 0
+                                                                        elif ev == "0.4":
+                                                                            col = 1
+                                                                        elif ev == "0.6":
+                                                                            col = 2
+                                                                        elif ev == "0.8":
+                                                                            col = 3
+                                                                        if oid == "0":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[0])
+                                                                        elif oid == "-1":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[6])
+                                                                        else:
+                                                                            lc = self.scalarMap.to_rgba(self.typo[3])
+                                                                        if m == "voter":
+                                                                            ls = "-"
+                                                                        elif m == "majority":
+                                                                            ls = "--"
+                                                                        ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
+                                                                        ax[row][col].set_xlim(0,x_lim+1)
+                                                                        ax[row][col].set_ylim(0,1)
+                                                                        if len(real_x_ticks)==0:
+                                                                            for x in range(0,x_lim+1,50):
+                                                                                if x%150 == 0:
+                                                                                    svoid_x_ticks.append('')
+                                                                                    void_x_ticks.append('')
+                                                                                    real_x_ticks.append(str(int(np.round(x,0))))
+                                                                                else:
+                                                                                    void_x_ticks.append('')
+                                                                            for y in range(0,11,1):
+                                                                                void_y_ticks.append('')
+                                                                        if row == 0:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                            axt = ax[row][col].twiny()
+                                                                            labels = [item.get_text() for item in axt.get_xticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_xticklabels(empty_string_labels)
+                                                                            if col==0:
+                                                                                axt.set_xlabel(r"$\eta = 0.2\,  s$")
+                                                                            elif col==1:
+                                                                                axt.set_xlabel(r"$\eta = 0.4\,  s$")
+                                                                            elif col==2:
+                                                                                axt.set_xlabel(r"$\eta = 0.6\,  s$")
+                                                                            elif col==3:
+                                                                                axt.set_xlabel(r"$\eta = 0.8\,  s$")
+                                                                        elif row==3:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                            ax[row][col].set_xlabel(r"$T\,  s$")
+                                                                        else:
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
+                                                                            ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                        if col==0:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1))
+                                                                            ax[row][col].set_ylabel("Q")
+                                                                        elif col==3:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                            axt = ax[row][col].twinx()
+                                                                            labels = [item.get_text() for item in axt.get_yticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_yticklabels(empty_string_labels)
+                                                                            if row==0:
+                                                                                axt.set_ylabel(r"$R = 0.2\,  s$")
+                                                                            elif row==1:
+                                                                                axt.set_ylabel(r"$R = 0.4\,  s$")
+                                                                            elif row==2:
+                                                                                axt.set_ylabel(r"$R = 0.6\,  s$")
+                                                                            elif row==3:
+                                                                                axt.set_ylabel(r"$R = 0.8\,  s$")
+                                                                        else:
+                                                                            ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                            for rw in range(4):
+                                for cl in range(4):
+                                    ax[rw][cl].grid(which='major')                
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_quorum.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
+                        else:
+                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
+                            save_fig = False
+                            col = 0
+                            ls  = "-"
+                            lc  = self.scalarMap.to_rgba(self.typo[0])
+                            for s in steps:
+                                for rt in rec_time:
+                                    x_lim = int(s)//int(rt)
+                                    for mq in mlq:
+                                        for mt in mtmt:
+                                            for ms in mxs:
+                                                for a in n_agents:
+                                                    for m in model:
+                                                        for rv in r_value:
+                                                            for ev in eta_value:
+                                                                for oid in option_id:
+                                                                    if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
+                                                                        save_fig = True
+                                                                        vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
+                                                                        if ev == "0.2":
+                                                                            col = 0
+                                                                        elif ev == "0.4":
+                                                                            col = 1
+                                                                        elif ev == "0.6":
+                                                                            col = 2
+                                                                        elif ev == "0.8":
+                                                                            col = 3
+                                                                        if oid == "0":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[0])
+                                                                        elif oid == "-1":
+                                                                            lc = self.scalarMap.to_rgba(self.typo[6])
+                                                                        else:
+                                                                            lc = self.scalarMap.to_rgba(self.typo[3])
+                                                                        if m == "voter":
+                                                                            ls = "-"
+                                                                        elif m == "majority":
+                                                                            ls = "--"
+                                                                        ax[col].plot(vals,color=lc,linestyle=ls,lw=6)
+                                                                        ax[col].set_xlim(0,x_lim+1)
+                                                                        ax[col].set_ylim(0,1)
+                                                                        if len(real_x_ticks)==0:
+                                                                            for x in range(0,x_lim+1,50):
+                                                                                if x%150 == 0:
+                                                                                    svoid_x_ticks.append('')
+                                                                                    void_x_ticks.append('')
+                                                                                    real_x_ticks.append(str(int(np.round(x,0))))
+                                                                                else:
+                                                                                    void_x_ticks.append('')
+                                                                            for y in range(0,11,1):
+                                                                                void_y_ticks.append('')
+                                                                        ax[col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                        ax[col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                        ax[col].set_xlabel(r"$T\,  s$")
+                                                                        axt = ax[col].twiny()
                                                                         labels = [item.get_text() for item in axt.get_xticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
                                                                         axt.set_xticklabels(empty_string_labels)
                                                                         if col==0:
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1))
+                                                                            ax[col].set_ylabel("Q")
                                                                             axt.set_xlabel(r"$\eta = 0.2\,  s$")
                                                                         elif col==1:
                                                                             axt.set_xlabel(r"$\eta = 0.4\,  s$")
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
                                                                         elif col==2:
                                                                             axt.set_xlabel(r"$\eta = 0.6\,  s$")
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
                                                                         elif col==3:
                                                                             axt.set_xlabel(r"$\eta = 0.8\,  s$")
-                                                                    elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        ax[row][col].set_xlabel(r"$T\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                    if col==0:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1))
-                                                                        ax[row][col].set_ylabel("Q")
-                                                                    elif col==3:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                                                                        axt = ax[row][col].twinx()
-                                                                        labels = [item.get_text() for item in axt.get_yticklabels()]
-                                                                        empty_string_labels = ['']*len(labels)
-                                                                        axt.set_yticklabels(empty_string_labels)
-                                                                        if row==0:
-                                                                            axt.set_ylabel(r"$R = 0.2\,  s$")
-                                                                        elif row==1:
-                                                                            axt.set_ylabel(r"$R = 0.4\,  s$")
-                                                                        elif row==2:
-                                                                            axt.set_ylabel(r"$R = 0.6\,  s$")
-                                                                        elif row==3:
-                                                                            axt.set_ylabel(r"$R = 0.8\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
+                                                                            ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                            axt = ax[col].twinx()
+                                                                            labels = [item.get_text() for item in axt.get_yticklabels()]
+                                                                            empty_string_labels = ['']*len(labels)
+                                                                            axt.set_yticklabels(empty_string_labels)
                             for cl in range(4):
-                                ax[rw][cl].grid(which='major')                
-                        fig.tight_layout()
-                        fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_quorum.pdf"
-                        if save_fig: fig.savefig(fig_path, bbox_inches="tight")
-                        plt.close(fig)
+                                ax[cl].grid(which='major') 
+                            fig.tight_layout()
+                            fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
+                            fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_quorum.pdf"
+                            if save_fig: fig.savefig(fig_path, bbox_inches="tight")
+                            plt.close(fig)
         return
     
 ##########################################################################################################
@@ -758,10 +924,9 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=4, ncols=4, figsize=(36,20))
+                        fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
                         save_fig = False
                         col = 0
-                        row = 0
                         ls  = "-"
                         lc  = self.scalarMap.to_rgba(self.typo[0])
                         for s in steps:
@@ -778,14 +943,6 @@ class Data:
                                                                 if dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid)) != None:
                                                                     save_fig = True
                                                                     vals = dictionary.get((s,rt,a,o,m,rv,ev,mq,mt,ms,oid))
-                                                                    if rv == "0.2":
-                                                                        row = 0
-                                                                    elif rv == "0.4":
-                                                                        row = 1
-                                                                    elif rv == "0.6":
-                                                                        row = 2
-                                                                    elif rv == "0.8":
-                                                                        row = 3
                                                                     if ev == "0.2":
                                                                         col = 0
                                                                     elif ev == "0.4":
@@ -804,9 +961,9 @@ class Data:
                                                                         ls = "-"
                                                                     elif m == "majority":
                                                                         ls = "--"
-                                                                    ax[row][col].plot(vals,color=lc,linestyle=ls,lw=6)
-                                                                    ax[row][col].set_xlim(0,x_lim+1)
-                                                                    ax[row][col].set_ylim(0,1)
+                                                                    ax[col].plot(vals,color=lc,linestyle=ls,lw=6)
+                                                                    ax[col].set_xlim(0,x_lim+1)
+                                                                    ax[col].set_ylim(0,1)
                                                                     if len(real_x_ticks)==0:
                                                                         for x in range(0,x_lim+1,50):
                                                                             if x%150 == 0:
@@ -817,53 +974,35 @@ class Data:
                                                                                 void_x_ticks.append('')
                                                                         for y in range(0,11,1):
                                                                             void_y_ticks.append('')
-                                                                    if row == 0:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        axt = ax[row][col].twiny()
-                                                                        labels = [item.get_text() for item in axt.get_xticklabels()]
-                                                                        empty_string_labels = ['']*len(labels)
-                                                                        axt.set_xticklabels(empty_string_labels)
-                                                                        if col==0:
-                                                                            axt.set_xlabel(r"$\eta = 0.2\,  s$")
-                                                                        elif col==1:
-                                                                            axt.set_xlabel(r"$\eta = 0.4\,  s$")
-                                                                        elif col==2:
-                                                                            axt.set_xlabel(r"$\eta = 0.6\,  s$")
-                                                                        elif col==3:
-                                                                            axt.set_xlabel(r"$\eta = 0.8\,  s$")
-                                                                    elif row==3:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
-                                                                        ax[row][col].set_xlabel(r"$T\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,150),labels=svoid_x_ticks)
-                                                                        ax[row][col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                    ax[col].set_xticks(np.arange(0,x_lim+1,150),labels=real_x_ticks)
+                                                                    ax[col].set_xticks(np.arange(0,x_lim+1,50),labels=void_x_ticks,minor=True)
+                                                                    ax[col].set_xlabel(r"$T\,  s$")
+                                                                    axt = ax[col].twiny()
+                                                                    labels = [item.get_text() for item in axt.get_xticklabels()]
+                                                                    empty_string_labels = ['']*len(labels)
+                                                                    axt.set_xticklabels(empty_string_labels)
                                                                     if col==0:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1))
-                                                                        ax[row][col].set_ylabel("Q")
+                                                                        ax[col].set_yticks(np.arange(0,1.01,.1))
+                                                                        ax[col].set_ylabel("A")
+                                                                        axt.set_xlabel(r"$\eta = 0.2\,  s$")
+                                                                    elif col==1:
+                                                                        axt.set_xlabel(r"$\eta = 0.4\,  s$")
+                                                                        ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                    elif col==2:
+                                                                        axt.set_xlabel(r"$\eta = 0.6\,  s$")
+                                                                        ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
                                                                     elif col==3:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                                                                        axt = ax[row][col].twinx()
+                                                                        axt.set_xlabel(r"$\eta = 0.8\,  s$")
+                                                                        ax[col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
+                                                                        axt = ax[col].twinx()
                                                                         labels = [item.get_text() for item in axt.get_yticklabels()]
                                                                         empty_string_labels = ['']*len(labels)
                                                                         axt.set_yticklabels(empty_string_labels)
-                                                                        if row==0:
-                                                                            axt.set_ylabel(r"$R = 0.2\,  s$")
-                                                                        elif row==1:
-                                                                            axt.set_ylabel(r"$R = 0.4\,  s$")
-                                                                        elif row==2:
-                                                                            axt.set_ylabel(r"$R = 0.6\,  s$")
-                                                                        elif row==3:
-                                                                            axt.set_ylabel(r"$R = 0.8\,  s$")
-                                                                    else:
-                                                                        ax[row][col].set_yticks(np.arange(0,1.01,.1),labels=void_y_ticks)
-                        for rw in range(4):
-                            for cl in range(4):
-                                ax[rw][cl].grid(which='major')                  
+                        for cl in range(4):
+                            ax[cl].grid(which='major') 
                         fig.tight_layout()
                         fig.legend(bbox_to_anchor=(1, 0),handles=handles_r,ncols=5,loc="upper right",framealpha=0.7,borderaxespad=0)
-                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_control_parameter.pdf"
+                        fig_path = output_dir+"/r#"+str(r)+"_c#"+str(c)+"_h#"+str(mh)+"_o#"+str(o)+"_controlParameter.pdf"
                         if save_fig: fig.savefig(fig_path, bbox_inches="tight")
                         plt.close(fig)
         return
