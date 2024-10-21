@@ -69,7 +69,8 @@ class Results:
         median_time = self.extract_median(times,int(max_steps//rec_time))
         self.dump_median_time(base,"times_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, median_time])
         del times, median_time
-        residence, quorum, control_parameter = self.compute_average_residence_quorum_controlParam_on_options(commits,quorums,r_params,n_agents,n_options)
+        strategy = base.split('_')[-1]
+        residence, quorum, control_parameter = self.compute_average_residence_quorum_controlParam_on_options(strategy,commits,quorums,r_params,n_agents,n_options)
         del commits, commit_bigM_1, commit_M_1, quorums, quorum_bigM_1, quorum_M_1, r_params, r_bigM_1, r_M_1
         self.dump_residence(base,"residence_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, residence])
         self.dump_quorum(base,"quorum_resume.csv", [max_steps, rec_time, communication, n_agents, n_options, model, r_type, r_value, eta_value, quorum_min_list, msg_timeout, msg_x_step, msg_hops, quorum])
@@ -130,7 +131,7 @@ class Results:
         return times
     
 ##########################################################################################################
-    def compute_average_residence_quorum_controlParam_on_options(self,commits,quorums,r_params,num_agents,num_options):
+    def compute_average_residence_quorum_controlParam_on_options(self,strategy,commits,quorums,r_params,num_agents,num_options):
         print("--- Computing average quorum on options ---")
         output_agents = np.array([[0] * len(commits[0][0])] * (num_options+1),dtype=float)
         output_quorum = np.array([[0] * len(commits[0][0])] * (num_options+1),dtype=float)
@@ -150,7 +151,13 @@ class Results:
                         flag_q[j][k] = flag_q[j][k]/committed_agents[j][k]
                         flag_r[j][k] = flag_r[j][k]/committed_agents[j][k]
                     else:
-                        flag_r[j][k] = 1
+                        if strategy == '0':
+                            if j == num_options:
+                                flag_r[j][k] = 0
+                            else:
+                                flag_r[j][k] = 1                                
+                        else:
+                            flag_r[j][k] = 1
             for j in range(num_options+1):
                 for k in range(len(output_quorum[0])):
                     output_agents[j][k] += committed_agents[j][k]
