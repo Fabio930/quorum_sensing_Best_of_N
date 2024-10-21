@@ -584,7 +584,7 @@ class Data:
                             if save_fig: fig.savefig(fig_path, bbox_inches="tight")
                             plt.close(fig)
                         else:
-                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
+                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,10))
                             save_fig = False
                             col = 0
                             ls  = "-"
@@ -809,7 +809,7 @@ class Data:
                             if save_fig: fig.savefig(fig_path, bbox_inches="tight")
                             plt.close(fig)
                         else:
-                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
+                            fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,10))
                             save_fig = False
                             col = 0
                             ls  = "-"
@@ -924,7 +924,7 @@ class Data:
                 for mh in hops_dict.keys():
                     dictionary = hops_dict.get(mh)
                     for o in n_options:
-                        fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,20))
+                        fig, ax = plt.subplots(nrows=1, ncols=4, figsize=(36,10))
                         save_fig = False
                         col = 0
                         ls  = "-"

@@ -195,7 +195,7 @@ class Agent:
         if Agent.r_type=="decentralized":
             self.r = 1 - self.quorum_level# if self.committed == -1 else 1-self.quorum_level
         elif Agent.r_type=="centralized":
-            self.r = 1 - self.compute_gt()# if self.committed == -1 else 1-self.compute_gt()
+            self.r = self.compute_gt() if self.committed == -1 else 1-self.compute_gt()
         if random.uniform(0,1) < self.r:
             if Agent.model == "voter":
                 self.voter_model()
