@@ -9,7 +9,7 @@ class Results:
     def __init__(self,arena):
         self.arena = arena
         self.files = [0]*arena.num_agents
-        self.base = os.path.abspath("../results_raw")
+        self.base = os.path.abspath("../results_raw_"+str(Agent.distribution)+"_distr")
         if not os.path.exists(self.base):
             os.mkdir(self.base)
         steps_dir = self.base + "/s#" + str(arena.experiment_length) + "_rec#" + str(arena.rec_time)
