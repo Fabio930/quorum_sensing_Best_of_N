@@ -10,7 +10,7 @@ class Data:
     def __init__(self) -> None:
         plt.rcParams.update({"font.size":36})
         self.cm             = plt.get_cmap('viridis') 
-        self.typo           = [0,1,2,3,4,5,6,7,8,9,10]
+        self.typo           = [0,1,2,3,4,5,6,7]
         self.cNorm          = colors.Normalize(vmin=self.typo[0], vmax=self.typo[-1])
         self.scalarMap      = cmx.ScalarMappable(norm=self.cNorm, cmap=self.cm)
         self.input_folders  = []
