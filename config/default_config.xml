@@ -12,8 +12,8 @@
             <agent
                   rebroadcast = "no"
                   model = "voter"
-                  r_type = "centralized"
-                  r_val = ".5"
+                  r_type = "static"
+                  r_val = ".6"
                   eta = ".4"
                   quorum_list_min = "8"
                   message_timeout = "6"
