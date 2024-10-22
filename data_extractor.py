@@ -5,7 +5,7 @@ class Results:
         
 ##########################################################################################################
     def __init__(self):
-        self.threshold = 0.9
+        self.threshold = 0.8
         self.base = os.path.abspath("")
         self.input_folders  = []
         self.output_folders = []
