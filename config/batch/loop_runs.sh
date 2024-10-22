@@ -22,15 +22,15 @@ rebroadcast="no" # static centralized decentralized
 num_agents="100"
 num_options="2 5"
 distribution="even quorum"
-r_type="centralized" # static decentralized
+r_type="static centralized" # decentralized
 eta="0.2 0.4 0.6 0.8"
 quorum_list_min="8"
 message_timeout="6"
 messages_per_step="5"
 
 for agents in $num_agents; do
-    for mdl in $model; do
-        for distr in $distribution; do
+    for distr in $distribution; do
+        for mdl in $model; do
             for rebrcts in $rebroadcast; do
                 if [[ $rebrcts == "static" || $rebrcts == "centralized" || $rebrcts == "decentralized" ]]; then
                     message_hops="10 20 30"
