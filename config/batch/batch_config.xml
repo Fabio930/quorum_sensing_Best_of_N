@@ -6,10 +6,11 @@
             num_options = "__NUM_OPTIONS__"
             experiment_length = "10000"
             rec_time = "10"
-            num_runs = "100">
+            num_runs = "25">
             <agent
                   rebroadcast = "__REBROADCAST__"
                   model = "__MODEL__"
+                  distribution = "__DISTRIBUTION__"
                   r_type = "__R_TYPE__"
                   r_val = "__R_VAL__"
                   eta = "__ETA__"
