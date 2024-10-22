@@ -172,7 +172,7 @@ class Agent:
     def voter_model(self):
         message_id = self.take_message_from_buffer()
         if message_id != None:
-            if self.committed > -1:
+            if self.committed != -1:
                 if int(self.message_buffer[message_id][1]) != self.committed:
                        self.committed = -1
             else:
@@ -183,7 +183,7 @@ class Agent:
     def majority_model(self):
         commit_to = self.check_majority()
         if commit_to != None:
-            if self.committed > -1:
+            if self.committed != -1:
                 if commit_to != self.committed:
                     self.committed = -1
             else:
@@ -195,7 +195,7 @@ class Agent:
         if Agent.r_type=="decentralized":
             self.r = 1 - self.quorum_level# if self.committed == -1 else 1-self.quorum_level
         elif Agent.r_type=="centralized":
-            self.r = self.compute_gt() if self.committed == -1 else 1-self.compute_gt()
+            self.r = 1 - self.compute_gt()# if self.committed == -1 else 1-self.compute_gt()
         if random.uniform(0,1) < self.r:
             if Agent.model == "voter":
                 self.voter_model()
@@ -203,14 +203,20 @@ class Agent:
                 self.majority_model()
         else:
             p = random.uniform(0,1)
-            if self.committed==-1:
-                if p < Agent.eta:
+            if p < Agent.eta:
+                vec = np.delete(self.options,self.best_id)
+                option = random.choice(vec)
+                if self.committed == -1:
+                    self.committed = option
+                else:
+                    if self.committed != option:
+                        self.committed = -1
+            else:
+                if self.committed == -1:
                     self.committed = self.best_id
                 else:
-                    vec = np.delete(self.options,self.best_id)
-                    self.committed = random.choice(vec)
-            else:
-                if p < .01: self.committed = -1
+                    if self.committed != self.best_id:
+                        self.committed = -1
         return
     
     #########################################################################
@@ -294,7 +300,9 @@ class Agent:
         if len(self.message_buffer) == 0:
             return None
         rnd_id = random.choice(np.arange(len(self.message_buffer)))
-        return rnd_id if self.message_buffer[rnd_id][1] > -1 else None
+        while self.message_buffer[rnd_id][1] == -1:
+            rnd_id = random.choice(np.arange(len(self.message_buffer)))
+        return rnd_id
 
     #########################################################################
     def erase_expired_messages(self):
