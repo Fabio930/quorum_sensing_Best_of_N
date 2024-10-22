@@ -43,6 +43,7 @@ class Agent:
     quorum_list_min     = 5
     message_hops        = 1
     eta                 = .6
+    distribution        = "even"
     model               = "voter"
     r_type              = "static"
     rebroadcast         = "no"
@@ -103,6 +104,12 @@ class Agent:
                     print ("[WARNING] for tag <agent> in configuration file the parameter <model> should be 'voter' or 'majority'. Initialized to 'voter'.\n")
                 else:
                     Agent.model=ml
+            if config_element.attrib.get("distribution") is not None:
+                d = str(config_element.attrib["distribution"])
+                if d!="even" and d!="quorum":
+                    print ("[WARNING] for tag <agent> in configuration file the parameter <model> should be 'even' or 'quorum'. Initialized to 'voter'.\n")
+                else:
+                    Agent.distribution=d
             if config_element.attrib.get("r_type") is not None:
                 rv = str(config_element.attrib["r_type"])
                 if rv!="static" and rv!="centralized" and rv!="decentralized":
@@ -121,13 +128,24 @@ class Agent:
     ##########################################################################
     # generic init function brings back to initial positions
     def init_experiment( self ):
-        commit = Agent.arena.num_agents // (Agent.arena.num_options + 1)
         self.committed = -1
-        if self.id >= commit:
-            for i in range(2,Agent.arena.num_options + 2):
-                if self.id < commit*i:
-                    self.committed = i-2
-                    break
+        if Agent.distribution == "quorum":
+            if self.id < int(Agent.arena.num_agents * 0.8):
+                self.committed = 1
+            else:
+                commit = (Agent.arena.num_agents * 0.2) // (Agent.arena.num_options)
+                available = np.append(np.delete(np.arange(Agent.arena.num_options),1,axis=0),-1)
+                for i in range(1,Agent.arena.num_options + 1):
+                    if self.id < (commit * i) + int(Agent.arena.num_agents * 0.8):
+                        self.committed = available[i-1]
+                        break
+        elif Agent.distribution == "even":
+            commit = Agent.arena.num_agents // (Agent.arena.num_options + 1)
+            if self.id >= commit:
+                for i in range(2,Agent.arena.num_options + 2):
+                    if self.id < commit*i:
+                        self.committed = i-2
+                        break
         self.position = [0,0,0,0]
         self.message_buffer = []
         self.quorum_level = 0
@@ -162,10 +180,20 @@ class Agent:
                 count[int(self.message_buffer[i][1])] += 1
         max_u = 0
         best = None
+        bests = []
         for i in range(len(count)):
             if count[i] > max_u:
                 max_u = count[i]
-                best = i
+        if max_u > 0:
+            for i in range(len(count)):
+                if count[i] == max_u:
+                    bests.append(i)
+            p = random.uniform(0,1)
+            unit = 1/len(bests)
+            for i in range(len(bests)):
+                if p < unit * (i+1):
+                    best = bests[i]
+                    break
         return best
     
     ##########################################################################
@@ -298,6 +326,13 @@ class Agent:
     #########################################################################
     def take_message_from_buffer(self):
         if len(self.message_buffer) == 0:
+            return None
+        all_uncommitted = True
+        for i in range(len(self.message_buffer)):
+            if self.message_buffer[i][1] != -1:
+                all_uncommitted = False
+                break
+        if all_uncommitted:
             return None
         rnd_id = random.choice(np.arange(len(self.message_buffer)))
         while self.message_buffer[rnd_id][1] == -1:
