@@ -8,6 +8,7 @@
             rec_time = "10"
             num_runs = "25">
             <agent
+                  computing = "__COMPUTING__"
                   rebroadcast = "__REBROADCAST__"
                   model = "__MODEL__"
                   distribution = "__DISTRIBUTION__"

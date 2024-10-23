@@ -10,6 +10,7 @@
             rec_time = "10"
             num_runs = "1">
             <agent
+                  computing = "normal"
                   rebroadcast = "no"
                   model = "majority"
                   r_type = "static"

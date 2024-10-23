@@ -43,6 +43,7 @@ class Agent:
     quorum_list_min     = 5
     message_hops        = 1
     eta                 = .6
+    computing           = "normal"
     distribution        = "even"
     model               = "voter"
     r_type              = "static"
@@ -104,10 +105,16 @@ class Agent:
                     print ("[WARNING] for tag <agent> in configuration file the parameter <model> should be 'voter' or 'majority'. Initialized to 'voter'.\n")
                 else:
                     Agent.model=ml
+            if config_element.attrib.get("computing") is not None:
+                c = str(config_element.attrib["computing"])
+                if c!="normal" and c!="absolute":
+                    print ("[WARNING] for tag <agent> in configuration file the parameter <computing> should be 'normal' or 'absolute'. Initialized to 'normal'.\n")
+                else:
+                    Agent.computing=c
             if config_element.attrib.get("distribution") is not None:
                 d = str(config_element.attrib["distribution"])
                 if d!="even" and d!="quorum":
-                    print ("[WARNING] for tag <agent> in configuration file the parameter <model> should be 'even' or 'quorum'. Initialized to 'voter'.\n")
+                    print ("[WARNING] for tag <agent> in configuration file the parameter <distribution> should be 'even' or 'quorum'. Initialized to 'even'.\n")
                 else:
                     Agent.distribution=d
             if config_element.attrib.get("r_type") is not None:
@@ -362,8 +369,17 @@ class Agent:
     
     #########################################################################
     def compute_gt(self):
-        gt = 1
-        for a in Agent.arena.agents:
-            if a.id!=self.id and a.committed == self.committed:
-                gt += 1
+        gt = 0
+        if Agent.computing == "absolute":
+            count = [0]*(self.arena.num_options + 1)
+            for a in Agent.arena.agents:
+                count[a.committed] += 1
+            for i in range(len(count)):
+                if count[i] > gt:
+                    gt = count[i]
+        else:
+            gt = 1
+            for a in Agent.arena.agents:
+                if a.id!=self.id and a.committed == self.committed:
+                    gt += 1
         return gt/Agent.arena.num_agents
